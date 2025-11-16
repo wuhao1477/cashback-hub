@@ -16,6 +16,17 @@ interface ConfigState {
 
 const STORAGE_KEY = 'cashback-hub:credentials';
 
+const envCredentials = resolveEnvCredentials();
+const hasEnvDefaults = Object.values(envCredentials).some((value) => Boolean(value));
+
+function resolveEnvCredentials(): ApiCredentials {
+  return {
+    appkey: import.meta.env.VITE_ZHE_TAOKE_APPKEY || '',
+    sid: import.meta.env.VITE_ZHE_TAOKE_SID || '',
+    customerId: import.meta.env.VITE_ZHE_TAOKE_CUSTOMER_ID || '',
+  };
+}
+
 function loadFromStorage(): ApiCredentials | null {
   try {
     const cached = localStorage.getItem(STORAGE_KEY);
@@ -36,11 +47,7 @@ function persistToStorage(data: ApiCredentials) {
 
 export const useConfigStore = defineStore('config', {
   state: (): ConfigState => ({
-    credentials: {
-      appkey: '',
-      sid: '',
-      customerId: '',
-    },
+    credentials: { ...envCredentials },
     runtimeMode: (import.meta.env.VITE_RUNTIME_MODE as RuntimeMode) || 'frontend',
     lastSyncedAt: undefined,
   }),
@@ -56,6 +63,10 @@ export const useConfigStore = defineStore('config', {
       if (credentials) {
         this.credentials = credentials;
         this.lastSyncedAt = Date.now();
+        return;
+      }
+      if (this.runtimeMode === 'frontend' && hasEnvDefaults) {
+        this.credentials = { ...envCredentials };
       }
     },
     updateCredentials(payload: ApiCredentials) {
@@ -67,7 +78,7 @@ export const useConfigStore = defineStore('config', {
       this.runtimeMode = mode;
     },
     resetCredentials() {
-      this.credentials = { appkey: '', sid: '', customerId: '' };
+      this.credentials = { ...resolveEnvCredentials() };
       this.lastSyncedAt = Date.now();
       persistToStorage(this.credentials);
     },

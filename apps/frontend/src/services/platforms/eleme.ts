@@ -3,7 +3,7 @@ import type { ActivityDetail, ActivityListResult } from '@/types/activity';
 import { BasePlatform } from './base';
 import type { ActivityDetailQuery, ActivityListQuery, RawActivity, RawDetailResponse, RawZtkListResponse } from './types';
 
-const LIST_ENDPOINT = 'https://api.zhetaoke.com:10000/api/api_activity.ashx';
+const LIST_ENDPOINT = 'http://api.zhetaoke.com:10000/api/api_activity.ashx';
 const DETAIL_ENDPOINT = 'https://api.zhetaoke.com:10001/api/open_eleme_generateLink.ashx';
 
 export class ElemePlatform extends BasePlatform {
@@ -22,7 +22,8 @@ export class ElemePlatform extends BasePlatform {
     });
 
     const payload = await method;
-    const list = this.unwrapListResponse(payload, query.traceId);
+    const body = this.unwrapPayload<RawZtkListResponse>(payload);
+    const list = this.unwrapListResponse(body, query.traceId);
     const cached = Boolean(method.fromCache);
     const items = list.map((raw) => this.normalizeActivity(raw, query.traceId, cached));
 
@@ -45,7 +46,8 @@ export class ElemePlatform extends BasePlatform {
     });
 
     const payload = await method;
-    const activity = extractDetail(payload) || {};
+    const body = this.unwrapPayload<RawDetailResponse>(payload);
+    const activity = extractDetail(body) || {};
     const summary = this.normalizeActivity(activity, query.traceId, Boolean(method.fromCache));
 
     return {

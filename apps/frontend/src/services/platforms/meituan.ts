@@ -4,7 +4,7 @@ import { PlatformRequestError } from '@/utils/errors';
 import { BasePlatform } from './base';
 import type { ActivityDetailQuery, ActivityListQuery, RawActivity, RawZtkListResponse } from './types';
 
-const ENDPOINT = 'https://api.zhetaoke.com:10000/api/api_activity.ashx';
+const ENDPOINT = 'http://api.zhetaoke.com:10000/api/api_activity.ashx';
 
 export class MeituanPlatform extends BasePlatform {
   readonly code = 'meituan';
@@ -23,7 +23,8 @@ export class MeituanPlatform extends BasePlatform {
     });
 
     const payload = await method;
-    const list = this.unwrapListResponse(payload, query.traceId);
+    const body = this.unwrapPayload<RawZtkListResponse>(payload);
+    const list = this.unwrapListResponse(body, query.traceId);
     const cached = Boolean(method.fromCache);
     const items = list.map((raw) => this.normalizeActivity(raw, query.traceId, cached));
 
@@ -47,7 +48,8 @@ export class MeituanPlatform extends BasePlatform {
     });
 
     const payload = await method;
-    const list = this.unwrapListResponse(payload, query.traceId);
+    const body = this.unwrapPayload<RawZtkListResponse>(payload);
+    const list = this.unwrapListResponse(body, query.traceId);
     const target = list.find((item) => String(item.activityId ?? item.activity_id ?? item.id) === String(query.id)) || list[0];
 
     if (!target) {

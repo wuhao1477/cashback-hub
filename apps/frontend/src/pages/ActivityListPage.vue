@@ -73,6 +73,7 @@ const finished = ref(false);
 const page = ref(1);
 const errorState = ref<{ message: string; traceId?: string } | null>(null);
 const PAGE_SIZE = 10;
+const isBackendMode = computed(() => configStore.runtimeMode === 'backend');
 
 const needConfig = computed(() => !configStore.isFrontendReady);
 const securityHint = computed(() =>
@@ -107,10 +108,16 @@ async function handleLoad() {
   if (loading.value || finished.value) return;
   loading.value = true;
   try {
-    const result = await fetchActivityList(activePlatform.value, { page: page.value, pageSize: PAGE_SIZE });
-    items.value = page.value === 1 ? result.items : [...items.value, ...result.items];
-    finished.value = !result.hasMore;
-    page.value += 1;
+    const requestPage = isBackendMode.value ? page.value : 1;
+    const result = await fetchActivityList(activePlatform.value, { page: requestPage, pageSize: PAGE_SIZE });
+    if (isBackendMode.value) {
+      items.value = requestPage === 1 ? result.items : [...items.value, ...result.items];
+      finished.value = !result.hasMore;
+      page.value += 1;
+    } else {
+      items.value = result.items;
+      finished.value = true;
+    }
     errorState.value = null;
   } catch (error) {
     const info = toDisplayMessage(error);

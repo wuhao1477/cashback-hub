@@ -91,7 +91,8 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 ## 运行模式切换
 
-1. **纯前端模式**（默认）：在“密钥配置”页面填写折淘客凭证，所有请求由浏览器发起，alova IndexedDB 缓存 30 分钟。
+1. **纯前端模式**（默认）：在“密钥配置”页面填写折淘客凭证，所有请求由浏览器直接发起（折淘客美团/饿了么接口原生不支持分页，因此仅拉取首页数据），并通过 alova IndexedDB 缓存 30 分钟。
+   - 如果 `.env(.development)` 中已配置 `VITE_ZHE_TAOKE_APPKEY/SID/CUSTOMER_ID`，配置页会默认读取这些值，无需手动输入。
 2. **前后端分离模式**：将 `VITE_RUNTIME_MODE` 设为 `backend` 并配置 `VITE_API_BASE_URL`（若同源可置空）。此时前端转发到 Fastify，后端负责签名、缓存、脱敏，前端无需填写密钥即可拉取活动。页面将显示“后端缓存管理”面板，可一键清理所有缓存或按平台调用 `DELETE /api/cache`。
 
 两种模式可在 UI TabBar 中的“密钥配置”页随时切换。
