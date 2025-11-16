@@ -1,8 +1,8 @@
+import type { ActivityAdapter, AdapterContext, DetailAdapterContext } from '@cashback/adapters';
 import { fetch } from 'undici';
 
 import { PlatformRequestError } from '../../utils/errors';
 import { buildSignedParams } from '../../utils/signature';
-import { formatCommission, formatDateRange, inferStatus } from '../../utils/formatter';
 import type {
   ActivityDetail,
   ActivityListResult,
@@ -26,12 +26,14 @@ interface FetchDetailOptions {
   linkType?: number;
 }
 
-export abstract class BasePlatformClient {
+export abstract class BasePlatformClient<TAdapter extends ActivityAdapter = ActivityAdapter> {
   abstract readonly code: PlatformCode;
   protected readonly config: AppConfig;
+  protected readonly adapter: TAdapter;
 
-  constructor(config: AppConfig) {
+  constructor(config: AppConfig, adapter: TAdapter) {
     this.config = config;
+    this.adapter = adapter;
   }
 
   abstract fetchList(options: FetchListOptions): Promise<ActivityListResult>;
@@ -59,14 +61,13 @@ export abstract class BasePlatformClient {
       url.searchParams.set(key, String(value));
     });
 
-    const response = await fetch(url,
-      {
-        method: 'GET',
-        headers: {
-          'user-agent': 'cashback-hub/0.1',
-          accept: 'application/json',
-        },
-      });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'user-agent': 'cashback-hub/0.1',
+        accept: 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new PlatformRequestError('上游接口返回异常', traceId, response.status);
@@ -77,57 +78,37 @@ export abstract class BasePlatformClient {
   }
 
   protected unwrapListPayload(payload: RawZtkResponse, traceId: string) {
-    const merged =
-      payload?.data?.activity_list ||
-      payload?.data?.list ||
-      payload?.data?.items ||
-      payload?.data?.result ||
-      payload?.data?.info ||
-      payload?.result ||
-      payload?.content;
-
-    if (!Array.isArray(merged)) {
-      throw new PlatformRequestError('未获取到有效的活动数据', traceId, 500, payload);
+    try {
+      return this.adapter.extractActivities(payload, this.createAdapterContext(traceId));
+    } catch (error) {
+      throw new PlatformRequestError('未获取到有效的活动数据', traceId, 500, { payload, error });
     }
-    return merged as RawActivity[];
   }
 
   protected normalizeActivity(raw: RawActivity, traceId: string, cached: boolean): ActivitySummary {
-    const id =
-      raw.activity_id ||
-      raw.activityId ||
-      raw.activity_id_long ||
-      raw.item_id ||
-      raw.id ||
-      raw.activityid ||
-      raw.actId ||
-      raw.act_id ||
-      traceId;
-    const title = raw.title || raw.activity_name || raw.name || '未命名活动';
-    const start = raw.start_time || raw.startTime;
-    const end = raw.end_time || raw.endTime;
-    const commissionRate = Number(raw.commission_rate ?? raw.rate ?? raw.return_money ?? 0);
-    const tags = Array.isArray(raw.tags)
-      ? raw.tags
-      : typeof raw.tags === 'string'
-        ? raw.tags
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter(Boolean)
-        : [];
+    return this.adapter.normalizeSummary(raw, this.createAdapterContext(traceId, cached)) as ActivitySummary;
+  }
 
+  protected createAdapterContext(traceId: string, cached = false): AdapterContext {
     return {
-      id: String(id),
-      title,
-      platform: this.code,
-      cover: raw.mainPic || raw.cover || raw.image || '',
-      commissionRate,
-      commissionText: formatCommission(commissionRate || 0),
-      deadlineText: formatDateRange(start, end),
-      status: inferStatus(start, end),
-      tags,
       traceId,
       cached,
+      logger: (message, extra) => {
+        if (process.env.NODE_ENV !== 'production') {
+          if (extra !== undefined) {
+            console.debug(`[Platform:${traceId}] ${message}`, extra);
+          } else {
+            console.debug(`[Platform:${traceId}] ${message}`);
+          }
+        }
+      },
+    };
+  }
+
+  protected createDetailContext(traceId: string, cached = false, linkType?: number): DetailAdapterContext {
+    return {
+      ...this.createAdapterContext(traceId, cached),
+      linkType,
     };
   }
 }

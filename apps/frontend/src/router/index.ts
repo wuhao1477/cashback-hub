@@ -19,6 +19,24 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '活动详情' },
   },
   {
+    path: '/activities/detail',
+    name: 'activity-detail-query',
+    beforeEnter: (to) => {
+      const platform = Array.isArray(to.query.platform) ? to.query.platform[0] : to.query.platform;
+      const id = Array.isArray(to.query.id) ? to.query.id[0] : to.query.id;
+      if (typeof platform === 'string' && typeof id === 'string') {
+        return {
+          name: 'activity-detail',
+          params: { platform, id },
+        };
+      }
+      return { name: 'activities' };
+    },
+    component: () => import('@/pages/ActivityDetailPage.vue'),
+    props: true,
+    meta: { title: '活动详情' },
+  },
+  {
     path: '/config',
     name: 'config',
     component: () => import('@/pages/ConfigPage.vue'),

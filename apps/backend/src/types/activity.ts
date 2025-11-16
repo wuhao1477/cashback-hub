@@ -1,4 +1,13 @@
-export type PlatformCode = 'meituan' | 'eleme';
+import type {
+  RawActivity as AdapterRawActivity,
+  RawZtkListResponse,
+  StandardActivityDetail,
+  StandardActivitySummary,
+  StandardLinkVariant,
+  StandardQrCode,
+} from '@cashback/adapters';
+
+export type PlatformCode = StandardActivitySummary['platform'];
 
 export interface PlatformMeta {
   code: PlatformCode;
@@ -9,41 +18,10 @@ export interface PlatformMeta {
 
 export type ActivityStatus = 'online' | 'offline' | 'upcoming' | 'unknown';
 
-export interface ActivitySummary {
-  id: string;
-  title: string;
-  platform: PlatformCode;
-  cover: string;
-  commissionRate: number;
-  commissionText: string;
-  deadlineText: string;
-  status: ActivityStatus;
-  tags: string[];
-  traceId: string;
-  cached: boolean;
-}
-
-export interface LinkVariant {
-  type: number;
-  label: string;
-  url: string;
-}
-
-export interface QrCodeMeta {
-  label: string;
-  url: string;
-}
-
-export interface ActivityDetail extends ActivitySummary {
-  description?: string;
-  link?: string;
-  couponLink?: string;
-  rules?: string;
-  extra: Array<{ label: string; value: string }>;
-  raw?: Record<string, any>;
-  linkVariants?: LinkVariant[];
-  qrcodes?: QrCodeMeta[];
-}
+export type ActivitySummary = StandardActivitySummary;
+export type LinkVariant = StandardLinkVariant;
+export type QrCodeMeta = StandardQrCode;
+export type ActivityDetail = StandardActivityDetail;
 
 export interface ActivityListResult {
   items: ActivitySummary[];
@@ -55,5 +33,5 @@ export interface ActivityListResult {
 
 export interface ActivityDetailResult extends ActivityDetail {}
 
-export type RawActivity = Record<string, any>;
-export type RawZtkResponse = Record<string, any>;
+export type RawActivity = AdapterRawActivity;
+export type RawZtkResponse = RawZtkListResponse;

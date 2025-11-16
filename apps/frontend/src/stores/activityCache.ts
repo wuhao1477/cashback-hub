@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 import type { PlatformCode } from '@/types/activity';
 import type { RawActivity } from '@/services/platforms/types';
+import { getPlatformAdapter } from '@/services/platforms/adapters';
 
 type ActivityMap = Record<string, RawActivity>;
 
@@ -14,16 +15,11 @@ export const useActivityCacheStore = defineStore('activity-cache', {
       if (!this.records[platform]) {
         this.records[platform] = {};
       }
+      const adapter = getPlatformAdapter(platform);
       list.forEach((item) => {
-        const id =
-          item.activity_id ||
-          item.activityId ||
-          item.id ||
-          item.activityid ||
-          item.actId ||
-          item.act_id;
+        const id = adapter.getActivityId(item);
         if (id) {
-          this.records[platform][String(id)] = item;
+          this.records[platform][id] = item;
         }
       });
     },

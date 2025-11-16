@@ -1,3 +1,4 @@
+import type { RawActivity as AdapterRawActivity, RawElemeDetailResponse, RawZtkListResponse as AdapterRawZtkListResponse } from '@cashback/adapters';
 import type { ActivityDetail, ActivityListResult, PlatformCode } from '@/types/activity';
 import type { ApiCredentials, RuntimeMode } from '@/stores/config';
 
@@ -19,28 +20,9 @@ export interface ActivityDetailQuery {
   linkType?: number;
 }
 
-export type RawActivity = Record<string, any>;
-
-export interface RawZtkListResponse {
-  code?: number | string;
-  status?: number | string;
-  message?: string;
-  msg?: string;
-  data?: {
-    activity_list?: RawActivity[];
-    list?: RawActivity[];
-    items?: RawActivity[];
-    result?: RawActivity[];
-    info?: RawActivity[];
-    total_results?: number;
-  };
-  result?: RawActivity[];
-  content?: RawActivity[];
-}
-
-export interface RawDetailResponse extends RawZtkListResponse {
-  activity?: RawActivity;
-}
+export type RawActivity = AdapterRawActivity;
+export type RawZtkListResponse = AdapterRawZtkListResponse;
+export type RawDetailResponse = RawElemeDetailResponse;
 
 export interface PlatformImplementation {
   readonly code: PlatformCode;

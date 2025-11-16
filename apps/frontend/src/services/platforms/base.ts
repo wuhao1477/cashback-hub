@@ -1,5 +1,5 @@
+import type { ActivityAdapter, AdapterContext, DetailAdapterContext } from '@cashback/adapters';
 import type { ActivityDetail, ActivityListResult, ActivitySummary, PlatformCode } from '@/types/activity';
-import { formatCommission, formatDateRange, inferStatus } from '@/utils/formatter';
 import { buildSecureParams } from '@/utils/signature';
 import { PlatformRequestError } from '@/utils/errors';
 import type { ApiCredentials, RuntimeMode } from '@/stores/config';
@@ -10,15 +10,17 @@ interface BuildParamOptions {
   extra?: Record<string, unknown>;
 }
 
-export abstract class BasePlatform {
+export abstract class BasePlatform<TAdapter extends ActivityAdapter = ActivityAdapter> {
   abstract readonly code: PlatformCode;
 
   protected readonly credentials: ApiCredentials;
   protected readonly runtimeMode: RuntimeMode;
+  protected readonly adapter: TAdapter;
 
-  constructor(context: PlatformContext) {
+  constructor(context: PlatformContext, adapter: TAdapter) {
     this.credentials = context.credentials;
     this.runtimeMode = context.runtimeMode;
+    this.adapter = adapter;
   }
 
   abstract fetchList(query: ActivityListQuery): Promise<ActivityListResult>;
@@ -63,158 +65,33 @@ export abstract class BasePlatform {
     return payload as T;
   }
 
-  // 折淘客返回结构并不稳定，此处按候选字段挨个尝试解析
   protected unwrapListResponse(response: RawZtkListResponse, traceId: string) {
-    const candidates = [
-      response?.data?.activity_list,
-      response?.data?.list,
-      response?.data?.items,
-      response?.data?.result,
-      response?.data?.info,
-      response?.result,
-      parseAsJson(response?.result),
-      response?.content,
-      parseAsJson(response?.content),
-      (response as Record<string, any>)?.content?.list,
-    ];
-
-    if ((response as any)?.status) {
-      logPlatformDebug(traceId, '原始响应类型', typeof (response as any)?.content);
+    try {
+      return this.adapter.extractActivities(response, this.createAdapterContext(traceId));
+    } catch (error) {
+      logPlatformDebug(traceId, '适配器解析活动列表失败', error);
+      throw new PlatformRequestError('未获取到有效的活动数据', traceId, { response, error });
     }
-
-    candidates.forEach((candidate, index) => {
-      logPlatformDebug(traceId, `尝试解析候选列表 ${index}`, snapshotCandidate(candidate));
-    });
-
-    logPlatformDebug(traceId, '原始响应快照', snapshotCandidate(response));
-
-    for (const candidate of candidates) {
-      const normalized = normalizeListCandidate(candidate);
-      if (normalized) {
-        logPlatformDebug(traceId, `解析成功，共 ${normalized.length} 条记录`, snapshotCandidate(candidate));
-        return normalized;
-      }
-    }
-
-    logPlatformDebug(traceId, '所有候选字段均未解析成功', response);
-    throw new PlatformRequestError('未获取到有效的活动数据', traceId, response);
   }
 
-  // 归一化活动结构，便于前端统一渲染
   protected normalizeActivity(raw: RawActivity, traceId: string, cached: boolean): ActivitySummary {
-    const id =
-      raw.activity_id ||
-      raw.activityId ||
-      raw.activity_id_long ||
-      raw.item_id ||
-      raw.id ||
-      raw.activityid ||
-      raw.actId ||
-      raw.act_id;
-    const title = raw.title || raw.activity_name || raw.name || raw.pageName || raw.page_name || '未命名活动';
-    const start = raw.start_time || raw.startTime || raw.start_date || raw.startDate;
-    const end = raw.end_time || raw.endTime || raw.end_date || raw.endDate;
-    const commission = resolveCommissionValue(raw);
-    const baseTags = Array.isArray(raw.tags)
-      ? (raw.tags as string[])
-      : typeof raw.tags === 'string'
-        ? String(raw.tags)
-            .split(',')
-            .map((item) => item.trim())
-            .filter(Boolean)
-        : [];
-    if (raw.platformName) baseTags.push(String(raw.platformName));
-    if (raw.platformType !== undefined) baseTags.push(`类型:${raw.platformType}`);
-    if (raw.avgCommissionRate) baseTags.push(String(raw.avgCommissionRate));
+    return this.adapter.normalizeSummary(raw, this.createAdapterContext(traceId, cached)) as ActivitySummary;
+  }
 
+  protected createAdapterContext(traceId: string, cached = false): AdapterContext {
     return {
-      id: String(id ?? traceId),
-      title,
-      platform: this.code,
-      cover: raw.mainPic || raw.cover || raw.image || raw.thumbnail || raw.bannerUrl || raw.pageUrl || '',
-      commissionRate: commission,
-      commissionText: formatCommission(commission || 0),
-      deadlineText: formatDateRange(start, end),
-      status: inferStatus(start, end),
-      tags: baseTags,
       traceId,
       cached,
+      logger: (message, extra) => logPlatformDebug(traceId, message, extra),
     };
   }
 
-}
-
-function normalizeListCandidate(candidate: unknown): RawActivity[] | null {
-  if (!candidate) return null;
-  if (Array.isArray(candidate)) return candidate as RawActivity[];
-
-  if (typeof candidate === 'string') {
-    try {
-      const parsed = JSON.parse(candidate);
-      if (Array.isArray(parsed)) return parsed as RawActivity[];
-      if (parsed && Array.isArray(parsed.list)) {
-        return parsed.list as RawActivity[];
-      }
-    } catch {
-      return null;
-    }
+  protected createDetailContext(traceId: string, cached = false, linkType?: number): DetailAdapterContext {
+    return {
+      ...this.createAdapterContext(traceId, cached),
+      linkType,
+    };
   }
-
-  if (typeof candidate === 'object' && Array.isArray((candidate as Record<string, any>).list)) {
-    return (candidate as Record<string, any>).list as RawActivity[];
-  }
-
-  return null;
-}
-
-// 折淘客部分字段会是字符串形式的 JSON，此处尝试解析
-function parseAsJson(input: unknown) {
-  if (typeof input !== 'string') return null;
-  try {
-    return JSON.parse(input);
-  } catch {
-    return null;
-  }
-}
-
-// 佣金字段可能出现多种写法，做一次容错解析
-function resolveCommissionValue(raw: RawActivity) {
-  const direct =
-    raw.commission_rate ?? raw.rate ?? raw.return_money ?? raw.commission ?? raw.commissionRate ?? raw.rateValue;
-  const normalized = parseCommission(direct);
-  if (normalized !== null) return normalized;
-  const avg = parseCommission(raw.avgCommissionRate);
-  if (avg !== null) return avg;
-  return 0;
-}
-
-function parseCommission(input: unknown): number | null {
-  if (typeof input === 'number') {
-    return input;
-  }
-  if (typeof input === 'string') {
-    const match = input.match(/[\d.]+/);
-    if (match) {
-      const num = Number(match[0]);
-      return Number.isFinite(num) ? num : null;
-    }
-  }
-  return null;
-}
-
-function snapshotCandidate(candidate: unknown) {
-  if (!candidate) return candidate;
-  if (Array.isArray(candidate)) {
-    return { type: 'array', length: candidate.length };
-  }
-  if (typeof candidate === 'string') {
-    return { type: 'string', preview: candidate.slice(0, 120) };
-  }
-  if (typeof candidate === 'object') {
-    const keys = Object.keys(candidate as Record<string, unknown>);
-    return { type: 'object', keys };
-  }
-  return typeof candidate;
 }
 
 // 仅在开发模式下打印平台调试信息，便于排查数据结构差异

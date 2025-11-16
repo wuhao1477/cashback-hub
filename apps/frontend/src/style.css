@@ -48,6 +48,7 @@ img {
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 15px 30px rgba(15, 23, 42, 0.04);
+  margin-top: 16px;
 }
 
 .section-title {

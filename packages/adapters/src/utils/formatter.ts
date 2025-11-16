@@ -1,20 +1,29 @@
 import dayjs from 'dayjs';
-import type { ActivityStatus } from '@/types/activity';
+import type { StandardActivityStatus } from '../types/standard';
 
-export function formatCommission(rate: number) {
-  if (!rate && rate !== 0) return '--';
-  if (rate > 1) return `${rate.toFixed(2).replace(/\.00$/, '')}%`;
-  return `${(rate * 100).toFixed(2).replace(/\.00$/, '')}%`;
+export function formatCommission(rate?: number) {
+  if (rate === undefined || rate === null || Number.isNaN(rate)) {
+    return '--';
+  }
+  const normalized = Number(rate);
+  if (!Number.isFinite(normalized)) {
+    return '--';
+  }
+  const value = normalized > 1 ? normalized : normalized * 100;
+  const text = value.toFixed(2).replace(/\.00$/, '');
+  return `${text}%`;
 }
 
 export function formatDateRange(start?: string, end?: string) {
-  if (!start && !end) return '有效期未知';
+  if (!start && !end) {
+    return '有效期未知';
+  }
   const startText = start ? dayjs(start).format('MM/DD HH:mm') : '即刻';
   const endText = end ? dayjs(end).format('MM/DD HH:mm') : '长期有效';
   return `${startText} - ${endText}`;
 }
 
-export function inferStatus(start?: string, end?: string): ActivityStatus {
+export function inferStatus(start?: string, end?: string): StandardActivityStatus {
   const now = dayjs();
   const startTime = start ? dayjs(start) : null;
   const endTime = end ? dayjs(end) : null;

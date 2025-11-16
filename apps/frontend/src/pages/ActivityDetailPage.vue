@@ -74,6 +74,10 @@
         <h2 class="section-title">更多信息</h2>
         <van-cell-group inset>
           <van-cell
+            title="活动地址"
+            :value="detail.link"
+          />
+          <van-cell
             v-for="item in detail.extra"
             :key="item.label"
             :title="item.label"
