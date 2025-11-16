@@ -22,7 +22,8 @@
 
 | 平台 | API | 描述 | 参考 URL |
 | --- | --- | --- | --- |
-| 美团 | 活动列表/详情 | `http://api.zhetaoke.com:10000/api/api_activity.ashx?appkey=<APPKEY>&activityId=<ID>&type=10`（详情接口将 `activityId` 替换为实际 ID） | 文档：https://api.apifox.cn/temp-links/api/236860068?t=3f91b153-b52d-481f-8f90-452a39dc6cf9 |
+| 美团 | 活动列表 | `http://api.zhetaoke.com:10000/api/api_activity.ashx?appkey=<APPKEY>&activityId=<ID>&type=10`（详情接口将 `activityId` 替换为实际 ID） | 文档：https://api.apifox.cn/temp-links/api/236860068?t=3f91b153-b52d-481f-8f90-452a39dc6cf9 |
+| 美团 | 活动详情/转链 | `http://api.zhetaoke.com:10000/api/open_meituan_generateLink.ashx?appkey=<APPKEY>&sid=<SID>&actId=<ID>&linkType=1&miniCode=1`（详情接口将 `activityId` 替换为实际 ID） | 文档：请访问以下链接获取接口“美团根据ID获取返利物料”的接口定义信息：https://api.apifox.cn/temp-links/api/236860068?t=f4e1e56f-43bc-4f42-bde4-23ba535c9e45 |
 | 饿了么 | 活动列表 | `http://api.zhetaoke.com:10000/api/api_activity.ashx?appkey=<APPKEY>&activityId=<ID>&type=11` | 文档：https://api.apifox.cn/temp-links/api/308160086?t=144e46ef-6dfb-49b7-8a9f-35fca4fbee1a |
 | 饿了么 | 活动详情/转链 | `https://api.zhetaoke.com:10001/api/open_eleme_generateLink.ashx?appkey=<APPKEY>&sid=<SID>&activity_id=<ID>&customer_id=<CID>` | 文档：https://api.apifox.cn/temp-links/api/247121494?t=4841bfd8-29ee-4ba0-bb3c-d6f8caee7977 |
 
