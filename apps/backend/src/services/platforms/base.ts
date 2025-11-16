@@ -23,6 +23,7 @@ interface FetchListOptions {
 interface FetchDetailOptions {
   id: string;
   traceId: string;
+  linkType?: number;
 }
 
 export abstract class BasePlatformClient {
@@ -42,7 +43,7 @@ export abstract class BasePlatformClient {
       {
         appkey: this.config.ZHE_TAOKE_APPKEY,
         sid: this.config.ZHE_TAOKE_SID,
-        customer_id: this.config.ZHE_TAOKE_CUSTOMER_ID,
+        customer_id: this.config.ZHE_TAOKE_CUSTOMER_ID || undefined,
         timestamp: Date.now(),
         traceId,
         ...extra,
@@ -93,7 +94,15 @@ export abstract class BasePlatformClient {
 
   protected normalizeActivity(raw: RawActivity, traceId: string, cached: boolean): ActivitySummary {
     const id =
-      raw.activity_id || raw.activityId || raw.activity_id_long || raw.item_id || raw.id || raw.activityid || traceId;
+      raw.activity_id ||
+      raw.activityId ||
+      raw.activity_id_long ||
+      raw.item_id ||
+      raw.id ||
+      raw.activityid ||
+      raw.actId ||
+      raw.act_id ||
+      traceId;
     const title = raw.title || raw.activity_name || raw.name || '未命名活动';
     const start = raw.start_time || raw.startTime;
     const end = raw.end_time || raw.endTime;

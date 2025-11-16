@@ -48,9 +48,8 @@
           v-model="form.customerId"
           name="customerId"
           label="客户 ID"
-          placeholder="请输入客户 ID"
+          placeholder="可选：若折淘客账号要求可填写"
           :disabled="runtimeMode === 'backend'"
-          required
         />
         <div class="form-actions">
           <van-button round block type="primary" native-type="submit" :loading="saving">

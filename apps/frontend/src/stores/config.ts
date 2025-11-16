@@ -5,7 +5,7 @@ export type RuntimeMode = 'frontend' | 'backend';
 export interface ApiCredentials {
   appkey: string;
   sid: string;
-  customerId: string;
+  customerId?: string;
 }
 
 interface ConfigState {
@@ -54,7 +54,7 @@ export const useConfigStore = defineStore('config', {
   getters: {
     isFrontendReady: (state) => {
       if (state.runtimeMode === 'backend') return true;
-      return Boolean(state.credentials.appkey && state.credentials.sid && state.credentials.customerId);
+      return Boolean(state.credentials.appkey && state.credentials.sid);
     },
   },
   actions: {

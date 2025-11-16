@@ -46,7 +46,7 @@ export abstract class BasePlatform {
       {
         appkey: this.credentials.appkey,
         sid: this.credentials.sid,
-        customer_id: this.credentials.customerId,
+        customer_id: this.credentials.customerId || undefined,
         timestamp: Date.now(),
         traceId,
         ...extra,
@@ -108,7 +108,9 @@ export abstract class BasePlatform {
       raw.activity_id_long ||
       raw.item_id ||
       raw.id ||
-      raw.activityid;
+      raw.activityid ||
+      raw.actId ||
+      raw.act_id;
     const title = raw.title || raw.activity_name || raw.name || raw.pageName || raw.page_name || '未命名活动';
     const start = raw.start_time || raw.startTime || raw.start_date || raw.startDate;
     const end = raw.end_time || raw.endTime || raw.end_date || raw.endDate;

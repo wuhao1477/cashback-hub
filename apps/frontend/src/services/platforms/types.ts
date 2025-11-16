@@ -16,6 +16,7 @@ export interface ActivityListQuery {
 export interface ActivityDetailQuery {
   id: string;
   traceId: string;
+  linkType?: number;
 }
 
 export type RawActivity = Record<string, any>;

@@ -46,16 +46,25 @@ export class ActivityService {
     return result;
   }
 
-  async fetchDetail(platform: PlatformCode, id: string) {
+  async fetchDetail(platform: PlatformCode, id: string, options: { linkType?: number } = {}) {
     const traceId = createTraceId(`${platform}-detail`);
-    const cacheKey = buildCacheKey(['platform', platform, 'api', 'detail', id]);
+    const normalizedLinkType = options.linkType ?? 0;
+    const cacheKey = buildCacheKey([
+      'platform',
+      platform,
+      'api',
+      'detail',
+      id,
+      'linkType',
+      String(normalizedLinkType),
+    ]);
     const cached = await this.cache.get<ActivityDetail>(cacheKey);
     if (cached) {
       return { ...cached, traceId, cached: true };
     }
 
     const client = createPlatformClient(platform, this.config);
-    const result = await client.fetchDetail({ id, traceId });
+    const result = await client.fetchDetail({ id, traceId, linkType: options.linkType });
     await this.cache.set(cacheKey, result);
     return result;
   }

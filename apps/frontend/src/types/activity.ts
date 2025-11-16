@@ -23,6 +23,19 @@ export interface ActivityDetail extends ActivitySummary {
   rules?: string;
   extra: Array<{ label: string; value: string }>;
   raw?: Record<string, any>;
+  linkVariants?: LinkVariant[];
+  qrcodes?: QrCodeMeta[];
+}
+
+export interface LinkVariant {
+  type: number;
+  label: string;
+  url: string;
+}
+
+export interface QrCodeMeta {
+  label: string;
+  url: string;
 }
 
 export interface ActivityListResult {

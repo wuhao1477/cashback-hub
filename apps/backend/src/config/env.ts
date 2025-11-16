@@ -3,7 +3,7 @@ import fastifyEnv from '@fastify/env';
 
 export const envSchema = {
   type: 'object',
-  required: ['ZHE_TAOKE_APPKEY', 'ZHE_TAOKE_SID', 'ZHE_TAOKE_CUSTOMER_ID'],
+  required: ['ZHE_TAOKE_APPKEY', 'ZHE_TAOKE_SID'],
   properties: {
     NODE_ENV: { type: 'string', default: 'development' },
     HOST: { type: 'string', default: '0.0.0.0' },
@@ -11,7 +11,7 @@ export const envSchema = {
     ALLOWED_ORIGINS: { type: 'string', default: '*' },
     ZHE_TAOKE_APPKEY: { type: 'string' },
     ZHE_TAOKE_SID: { type: 'string' },
-    ZHE_TAOKE_CUSTOMER_ID: { type: 'string' },
+    ZHE_TAOKE_CUSTOMER_ID: { type: 'string', default: '' },
     REDIS_HOST: { type: 'string', default: '127.0.0.1' },
     REDIS_PORT: { type: 'number', default: 6379 },
     REDIS_PASSWORD: { type: 'string', default: '' },
@@ -26,7 +26,7 @@ export type AppConfig = {
   ALLOWED_ORIGINS: string;
   ZHE_TAOKE_APPKEY: string;
   ZHE_TAOKE_SID: string;
-  ZHE_TAOKE_CUSTOMER_ID: string;
+  ZHE_TAOKE_CUSTOMER_ID?: string;
   REDIS_HOST: string;
   REDIS_PORT: number;
   REDIS_PASSWORD: string;

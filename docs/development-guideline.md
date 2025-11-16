@@ -5,7 +5,7 @@
 ## 1. 系统形态
 
 ### 1.1 纯前端模式
-- 前端提供可视化密钥管理，允许输入与本地持久化以下字段：`appkey`、`sid`、客户 ID、其他鉴权参数。
+- 前端提供可视化密钥管理，允许输入与本地持久化以下字段：`appkey`、`sid`、（可选）客户 ID、其他鉴权参数。
 - 使用 `alova.js`（或同能力库）实现 30 分钟默认过期的本地缓存，缓存键需要包含平台标识与 API 入口信息。
 - 所有请求直接由浏览器发起，需实现 **请求签名**、**参数加密** 与失败重试策略。
 - 前端 UI 提供密钥使用风险说明、调用状态展示与错误提示，默认使用 HTTPS API 域名。
@@ -23,7 +23,7 @@
 | 平台 | API | 描述 | 参考 URL |
 | --- | --- | --- | --- |
 | 美团 | 活动列表 | `http://api.zhetaoke.com:10000/api/api_activity.ashx?appkey=<APPKEY>&activityId=<ID>&type=10`（详情接口将 `activityId` 替换为实际 ID） | 文档：https://api.apifox.cn/temp-links/api/236860068?t=3f91b153-b52d-481f-8f90-452a39dc6cf9 |
-| 美团 | 活动详情/转链 | `http://api.zhetaoke.com:10000/api/open_meituan_generateLink.ashx?appkey=<APPKEY>&sid=<SID>&actId=<ID>&linkType=1&miniCode=1`（详情接口将 `activityId` 替换为实际 ID） | 文档：请访问以下链接获取接口“美团根据ID获取返利物料”的接口定义信息：https://api.apifox.cn/temp-links/api/236860068?t=f4e1e56f-43bc-4f42-bde4-23ba535c9e45 |
+| 美团 | 活动详情/转链 | `http://api.zhetaoke.com:10000/api/open_meituan_generateLink.ashx?appkey=<APPKEY>&sid=<SID>&actId=<ID>&linkType=1&miniCode=1`（详情接口将 `activityId` 替换为实际 ID；`linkType` 枚举：1-H5 长链，2-H5 短链，3-Deeplink/App 唤起，4-小程序唤起路径，5-团口令，默认返回短链） | 文档：请访问以下链接获取接口“美团根据ID获取返利物料”的接口定义信息：https://api.apifox.cn/temp-links/api/236860068?t=f4e1e56f-43bc-4f42-bde4-23ba535c9e45 |
 | 饿了么 | 活动列表 | `http://api.zhetaoke.com:10000/api/api_activity.ashx?appkey=<APPKEY>&activityId=<ID>&type=11` | 文档：https://api.apifox.cn/temp-links/api/308160086?t=144e46ef-6dfb-49b7-8a9f-35fca4fbee1a |
 | 饿了么 | 活动详情/转链 | `https://api.zhetaoke.com:10001/api/open_eleme_generateLink.ashx?appkey=<APPKEY>&sid=<SID>&activity_id=<ID>&customer_id=<CID>` | 文档：https://api.apifox.cn/temp-links/api/247121494?t=4841bfd8-29ee-4ba0-bb3c-d6f8caee7977 |
 
@@ -41,6 +41,9 @@
 - 明确平台区分（徽标/配色），提供平台筛选组件。
 - 引导用户在纯前端模式下完成密钥配置，并展示安全提示。
 - 展示 API 调用状态（loading/success/error），并在错误面板中附带请求 ID。
+- 美团二级展示要求：
+  - **PC 端**：展示 `open_meituan_generateLink` 返回的二维码（`qrcode_chang_pic`、`qrcode_wx_pic`、`wx_mini_pic`）以及 H5 链接。
+  - **H5 端**：展示多按钮入口（唤起 App、拉起小程序等），根据 `linkType` 字段选择合适的链接类型。
 
 ## 4. 安全、可维护与部署
 
