@@ -16,6 +16,7 @@ app.use(pinia);
 // 初始化配置，确保路由进入前能拿到最新密钥
 const configStore = useConfigStore();
 configStore.bootstrapFromStorage();
+configStore.applyCredentialsFromQuery(new URLSearchParams(window.location.search));
 
 app.use(router);
 app.use(Vant);

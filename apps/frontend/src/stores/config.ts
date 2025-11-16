@@ -74,6 +74,16 @@ export const useConfigStore = defineStore('config', {
       this.lastSyncedAt = Date.now();
       persistToStorage(this.credentials);
     },
+    applyCredentialsFromQuery(searchParams: URLSearchParams) {
+      if (this.runtimeMode !== 'frontend') return;
+      const appkey = getFirstAvailable(searchParams, ['ztk_key', 'ZTK_KEY']);
+      const sid = getFirstAvailable(searchParams, ['ztk_sid', 'ZTK_SID']);
+      if (!appkey && !sid) return;
+      const next: ApiCredentials = { ...this.credentials };
+      if (appkey) next.appkey = appkey;
+      if (sid) next.sid = sid;
+      this.updateCredentials(next);
+    },
     updateRuntimeMode(mode: RuntimeMode) {
       this.runtimeMode = mode;
     },
@@ -84,3 +94,11 @@ export const useConfigStore = defineStore('config', {
     },
   },
 });
+
+function getFirstAvailable(searchParams: URLSearchParams, keys: string[]) {
+  for (const key of keys) {
+    const value = searchParams.get(key);
+    if (value) return value;
+  }
+  return undefined;
+}
