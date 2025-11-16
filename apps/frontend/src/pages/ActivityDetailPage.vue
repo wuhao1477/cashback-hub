@@ -39,23 +39,7 @@
         </van-button>
       </section>
 
-      <section v-if="isDesktop" class="section-card">
-        <h2 class="section-title">二维码</h2>
-        <div v-if="qrcodes.length" class="qrcode-grid">
-          <div v-for="item in qrcodes" :key="item.label" class="qrcode-item" @click="previewQr(item)">
-            <img :src="item.url" :alt="item.label" />
-            <p>{{ item.label }}</p>
-          </div>
-        </div>
-        <div v-else class="qrcode-empty">
-          <p>暂无二维码，点击下方按钮获取</p>
-          <van-button type="primary" size="small" :loading="linkLoading === 1" @click="handleAction(1, false)">
-            加载二维码
-          </van-button>
-        </div>
-      </section>
-
-      <section v-else class="section-card">
+      <section v-if="!isDesktop" class="section-card">
         <h2 class="section-title">快速操作</h2>
         <div class="detail-actions">
           <van-button type="primary" block :loading="linkLoading === 3" @click="handleAction(3)">
@@ -84,6 +68,22 @@
             :value="item.value"
           />
         </van-cell-group>
+      </section>
+
+      <section class="section-card qrcode-section" :class="{ 'qrcode-section--mobile': !isDesktop }">
+        <h2 class="section-title">二维码</h2>
+        <div v-if="qrcodes.length" :class="isDesktop ? 'qrcode-grid' : 'qrcode-list'">
+          <div v-for="item in qrcodes" :key="item.label" class="qrcode-item" @click="previewQr(item)">
+            <img :src="item.url" :alt="item.label" />
+            <p>{{ item.label }}</p>
+          </div>
+        </div>
+        <div v-else class="qrcode-empty">
+          <p>暂无二维码，点击下方按钮获取</p>
+          <van-button type="primary" size="small" :loading="linkLoading === 1" @click="handleAction(1, false)">
+            加载二维码
+          </van-button>
+        </div>
       </section>
     </template>
   </div>
@@ -210,9 +210,9 @@ async function handleAction(linkType: number, shouldOpen = true) {
 }
 
 watch(
-  () => ({ ready: Boolean(detail.value), desktop: isDesktop.value, hasQr: qrcodes.value.length > 0 }),
+  () => ({ ready: Boolean(detail.value), hasQr: qrcodes.value.length > 0 }),
   (state) => {
-    if (state.ready && state.desktop && !state.hasQr && !prefetchedQr && !linkLoading.value) {
+    if (state.ready && !state.hasQr && !prefetchedQr && !linkLoading.value) {
       prefetchedQr = true;
       handleAction(1, false);
     }
@@ -254,14 +254,33 @@ watch(
   gap: 12px;
 }
 
+.qrcode-section {
+  margin-bottom: env(safe-area-inset-bottom, 24px);
+}
+
 .qrcode-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 16px;
 }
 
+.qrcode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.qrcode-section--mobile .qrcode-item img {
+  width: min(240px, 65vw);
+}
+
 .qrcode-item {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .qrcode-item img {
