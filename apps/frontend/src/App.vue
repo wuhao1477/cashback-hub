@@ -7,8 +7,9 @@
         </transition>
       </RouterView>
       <van-tabbar route fixed placeholder>
-        <van-tabbar-item replace to="/activities" icon="apps-o">活动</van-tabbar-item>
-        <van-tabbar-item replace to="/config" icon="setting-o">密钥配置</van-tabbar-item>
+        <van-tabbar-item replace to="/activities" icon="apps-o">
+          活动
+        </van-tabbar-item>
       </van-tabbar>
     </div>
   </van-config-provider>

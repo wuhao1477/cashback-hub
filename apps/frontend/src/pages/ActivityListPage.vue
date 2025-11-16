@@ -1,8 +1,11 @@
 <template>
   <div class="page">
-    <van-nav-bar title="活动列表" />
+    <div class="page__nav" @click="handleSecretTap">
+      <van-nav-bar title="活动列表" />
+    </div>
 
     <van-notice-bar
+      v-if="securityHint"
       class="page__notice"
       wrapable
       color="#16a34a"
@@ -74,13 +77,18 @@ const page = ref(1);
 const errorState = ref<{ message: string; traceId?: string } | null>(null);
 const PAGE_SIZE = 10;
 const isBackendMode = computed(() => configStore.runtimeMode === 'backend');
+const navTapCount = ref(0);
+let lastNavTap = 0;
+const NAV_TAP_THRESHOLD = 20;
+const NAV_TAP_INTERVAL_MS = 1200;
 
 const needConfig = computed(() => !configStore.isFrontendReady);
-const securityHint = computed(() =>
-  configStore.runtimeMode === 'frontend'
+const securityHint = computed(() => {
+  if (import.meta.env.PROD) return '';
+  return configStore.runtimeMode === 'frontend'
     ? '纯前端模式将使用浏览器中的密钥，请注意设备安全'
-    : '当前由后端代理请求，无需在浏览器内保留密钥'
-);
+    : '当前由后端代理请求，无需在浏览器内保留密钥';
+});
 
 watch(needConfig, (value) => {
   if (!value && !items.value.length) {
@@ -144,9 +152,28 @@ function resetState() {
 function handleSelect(activity: ActivitySummary) {
   router.push({ name: 'activity-detail', params: { platform: activity.platform, id: activity.id } });
 }
+
+function handleSecretTap() {
+  const now = Date.now();
+  if (now - lastNavTap <= NAV_TAP_INTERVAL_MS) {
+    navTapCount.value += 1;
+  } else {
+    navTapCount.value = 1;
+  }
+  lastNavTap = now;
+
+  if (navTapCount.value >= NAV_TAP_THRESHOLD) {
+    navTapCount.value = 0;
+    router.push('/config');
+  }
+}
 </script>
 
 <style scoped>
+.page__nav {
+  cursor: pointer;
+}
+
 .page__notice {
   margin: 12px 0;
 }
