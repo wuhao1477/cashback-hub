@@ -8,7 +8,7 @@
 cashback-hub/
 ├── apps/
 │   ├── frontend/    # Vue3 + Vite 前端，含密钥配置、活动列表/详情
-│   └── backend/     # Fastify 后端（开发中）
+│   └── backend/     # Fastify 后端服务
 ├── docs/            # 设计规范与实施计划
 ├── package.json     # 根脚本，统一调试/构建
 ├── pnpm-workspace.yaml
@@ -34,20 +34,22 @@ pnpm --filter frontend dev
 - 首次打开请进入“密钥配置”页，填写折淘客 `appkey`、`sid`、`customer_id` 等字段。
 - 活动列表使用 alova + IndexedDB 缓存 30 分钟，能在 UI 中看到“缓存”标记。
 
-### 启动后端（开发中）
+### 启动后端
 
-后端服务在 `apps/backend`。待完成基础模块后，可通过：
+后端服务在 `apps/backend`，提供折淘客 API 代理、缓存与日志能力：
 
 ```bash
 pnpm --filter backend dev
 ```
 
-后端将提供：
+> 默认监听 `http://0.0.0.0:3333`，可通过 `.env` 覆盖。
+
+核心能力：
 
 - 环境密钥集中管理（`.env.development` / `.env.production`）
 - 折淘客 API 转发、签名与数据脱敏
-- Redis 缓存（15-30 分钟 TTL）与手动失效接口
-- 请求限流、结构化日志与统一响应体 `{ code, message, data, traceId }`
+- Redis 缓存（TTL 默认 20 分钟）+ 手动失效接口
+- 请求限流、结构化 JSON 日志、统一响应 `{ code, message, data, traceId }`
 
 ## 常用脚本
 
@@ -66,7 +68,17 @@ pnpm --filter backend dev
 cp .env.example apps/frontend/.env
 ```
 
-前端变量以 `VITE_` 前缀注入浏览器。后端则使用 `.env.development`、`.env.production` 或 deployment 平台注入，示例字段：
+前端变量以 `VITE_` 前缀注入浏览器：
+
+```
+VITE_RUNTIME_MODE=frontend        # frontend：直接调用折淘客；backend：交由 Fastify 代理
+VITE_API_BASE_URL=http://localhost:3333   # 当运行于 backend 模式时指向代理地址
+VITE_ZHE_TAOKE_APPKEY=xxx         # 纯前端模式下在浏览器持久化
+VITE_ZHE_TAOKE_SID=xxx
+VITE_ZHE_TAOKE_CUSTOMER_ID=xxx
+```
+
+后端 `.env` 示例：
 
 ```
 ZHE_TAOKE_APPKEY=xxx
@@ -76,6 +88,13 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 ALLOWED_ORIGINS=http://localhost:5173
 ```
+
+## 运行模式切换
+
+1. **纯前端模式**（默认）：在“密钥配置”页面填写折淘客凭证，所有请求由浏览器发起，alova IndexedDB 缓存 30 分钟。
+2. **前后端分离模式**：将 `VITE_RUNTIME_MODE` 设为 `backend` 并配置 `VITE_API_BASE_URL`（若同源可置空）。此时前端转发到 Fastify，后端负责签名、缓存、脱敏，前端无需填写密钥即可拉取活动。
+
+两种模式可在 UI TabBar 中的“密钥配置”页随时切换。
 
 ## 架构亮点
 

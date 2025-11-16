@@ -3,8 +3,10 @@ import { createAlova } from 'alova';
 
 const HALF_HOUR = 30 * 60 * 1000;
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || '';
+
 export const http = createAlova({
-  baseURL: '',
+  baseURL,
   requestAdapter: axiosRequestAdapter(),
   cacheFor: {
     GET: {
