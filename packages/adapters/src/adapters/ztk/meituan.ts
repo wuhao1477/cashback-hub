@@ -28,6 +28,9 @@ export class ZtkMeituanAdapter extends BaseZtkAdapter<ZtkMeituanDetailSource> {
       raw: { ...source.base, linkDetail },
       linkVariants: linkInfo.variants,
       qrcodes: linkInfo.qrcodes,
+      linksByType: linkInfo.linksByType,
+      appLink: linkInfo.linksByType[3] || source.base.deeplink || source.base.deepLink || source.base.appLink,
+      miniProgramPath: linkInfo.linksByType[4] || source.base.wx_mini_path || source.base.wxMiniPath || source.base.miniProgramPath,
     };
   }
 
@@ -134,12 +137,19 @@ function normalizeLinkInfo(detail?: RawActivity) {
   const extraFields = qrcodes.map((item) => ({ label: item.label, value: item.url }));
   const defaultLink = variants.find((item) => item.type === 2)?.url || variants[0]?.url;
   const shortLink = variants.find((item) => item.type === 2)?.url;
+  const linksByType = variants.reduce<Record<number, string>>((acc, item) => {
+    if (acc[item.type] === undefined) {
+      acc[item.type] = item.url;
+    }
+    return acc;
+  }, {});
   return {
     variants,
     qrcodes,
     extraFields,
     defaultLink,
     shortLink,
+    linksByType,
   };
 }
 

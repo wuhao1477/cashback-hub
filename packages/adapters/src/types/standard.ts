@@ -41,4 +41,7 @@ export interface StandardActivityDetail extends StandardActivitySummary {
   raw?: Record<string, unknown>;
   linkVariants?: StandardLinkVariant[];
   qrcodes?: StandardQrCode[];
+  linksByType?: Record<number, string>;
+  appLink?: string;
+  miniProgramPath?: string;
 }

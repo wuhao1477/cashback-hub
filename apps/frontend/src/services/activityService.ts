@@ -1,4 +1,4 @@
-import type { ActivityDetail, ActivityListResult, PlatformCode } from '@/types/activity';
+import type { ActivityDetail, ActivityListResult, LinkVariant, PlatformCode, QrCodeMeta } from '@/types/activity';
 import type { ApiResponse } from '@/types/api';
 import { createPlatform, supportedPlatforms } from '@/services/platforms/factory';
 import type { ActivityListQuery } from '@/services/platforms/types';
@@ -101,7 +101,7 @@ async function fetchDetailFromBackend(platform: PlatformCode, id: string, option
   return payload.data;
 }
 
-export async function fetchLinkVariant(platform: PlatformCode, id: string, linkType: number) {
+export async function fetchLinkVariant(platform: PlatformCode, id: string, linkType: number): Promise<LinkVariantPayload> {
   const configStore = useConfigStore();
 
   if (configStore.runtimeMode === 'backend') {
@@ -116,6 +116,9 @@ export async function fetchLinkVariant(platform: PlatformCode, id: string, linkT
     return {
       linkVariants: payload.data.linkVariants ?? [],
       qrcodes: payload.data.qrcodes ?? [],
+      linksByType: payload.data.linksByType ?? {},
+      appLink: payload.data.appLink,
+      miniProgramPath: payload.data.miniProgramPath,
     };
   }
 
@@ -129,11 +132,22 @@ export async function fetchLinkVariant(platform: PlatformCode, id: string, linkT
     return {
       linkVariants: detail.linkVariants ?? [],
       qrcodes: detail.qrcodes ?? [],
+      linksByType: detail.linksByType ?? {},
+      appLink: detail.appLink,
+      miniProgramPath: detail.miniProgramPath,
     };
   } catch (error) {
     logFrontendError(traceId, '获取链接失败', error);
     throw new PlatformRequestError('获取链接失败', traceId, error);
   }
+}
+
+interface LinkVariantPayload {
+  linkVariants: LinkVariant[];
+  qrcodes: QrCodeMeta[];
+  linksByType: Record<number, string>;
+  appLink?: string;
+  miniProgramPath?: string;
 }
 
 // 统一的前端日志输出，方便在 DevTools 中按 traceId 排查

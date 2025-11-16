@@ -24,6 +24,19 @@ export class ZtkElemeAdapter extends BaseZtkAdapter<ZtkElemeDetailSource> {
       raw: { ...base, link },
       linkVariants: linkInfo.variants,
       qrcodes: linkInfo.qrcodes,
+      linksByType: linkInfo.linksByType,
+      appLink:
+        linkInfo.linksByType[3] ||
+        link?.alipay_promotion?.alipay_scheme_url ||
+        link?.taobao_promotion?.scheme_url ||
+        base.deeplink ||
+        base.deepLink,
+      miniProgramPath:
+        linkInfo.linksByType[4] ||
+        link?.alipay_promotion?.app_path ||
+        link?.alipay_promotion?.alipay_mini_url ||
+        link?.wx_promotion?.wx_path ||
+        link?.mini_program?.path,
     };
   }
 
@@ -89,6 +102,12 @@ function buildLinkInfo(link: Record<string, any>) {
 
   const defaultLink = variants.find((item) => item.type === 2)?.url || variants[0]?.url;
   const shortLink = variants.find((item) => item.type === 2)?.url;
+  const linksByType = variants.reduce<Record<number, string>>((acc, item) => {
+    if (acc[item.type] === undefined) {
+      acc[item.type] = item.url;
+    }
+    return acc;
+  }, {});
 
-  return { variants, qrcodes, extraFields, defaultLink, shortLink };
+  return { variants, qrcodes, extraFields, defaultLink, shortLink, linksByType };
 }

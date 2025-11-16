@@ -42,13 +42,18 @@
       <section v-if="!isDesktop" class="section-card">
         <h2 class="section-title">快速操作</h2>
         <div class="detail-actions">
-          <van-button type="primary" block :loading="linkLoading === 3" @click="handleAction(3)">
+          <van-button type="primary" block :loading="linkLoading === LINK_TYPE_MAP.APP" @click="handleOpenApp">
             唤起 App
           </van-button>
-          <van-button type="success" block :loading="linkLoading === 4" @click="handleAction(4)">
+          <van-button type="success" block :loading="linkLoading === LINK_TYPE_MAP.MINI_PROGRAM" @click="handleOpenMiniProgram">
             拉起小程序
           </van-button>
-          <van-button type="default" block :loading="linkLoading === 2" @click="handleAction(2)">
+          <van-button
+            type="default"
+            block
+            :loading="linkLoading === LINK_TYPE_MAP.H5_SHORT"
+            @click="handleLinkAction('H5_SHORT')"
+          >
             H5 打开
           </van-button>
         </div>
@@ -80,7 +85,12 @@
         </div>
         <div v-else class="qrcode-empty">
           <p>暂无二维码，点击下方按钮获取</p>
-          <van-button type="primary" size="small" :loading="linkLoading === 1" @click="handleAction(1, false)">
+          <van-button
+            type="primary"
+            size="small"
+            :loading="linkLoading === LINK_TYPE_MAP.H5_LONG"
+            @click="handleLinkAction('H5_LONG', false)"
+          >
             加载二维码
           </van-button>
         </div>
@@ -106,6 +116,15 @@ const errorState = ref<{ message: string; traceId?: string } | null>(null);
 const isDesktop = ref(false);
 const linkVariants = ref<LinkVariant[]>([]);
 const qrcodes = ref<QrCodeMeta[]>([]);
+const linksByType = ref<Record<number, string>>({});
+const LINK_TYPE_MAP = {
+  H5_LONG: 1,
+  H5_SHORT: 2,
+  APP: 3,
+  MINI_PROGRAM: 4,
+  COMMAND: 5,
+} as const;
+type LinkSemanticType = keyof typeof LINK_TYPE_MAP;
 const linkLoading = ref<number | null>(null);
 const platformCode = computed(() => route.params.platform as PlatformCode);
 const activityId = computed(() => route.params.id as string);
@@ -157,6 +176,7 @@ function syncLinkInfo(data?: ActivityDetail) {
   if (!data) return;
   linkVariants.value = data.linkVariants ?? [];
   qrcodes.value = data.qrcodes ?? [];
+  linksByType.value = data.linksByType ? { ...data.linksByType } : {};
 }
 
 function previewQr(item: QrCodeMeta) {
@@ -164,42 +184,56 @@ function previewQr(item: QrCodeMeta) {
   showImagePreview({ images: [item.url], closeable: true, showIndex: false, loop: false });
 }
 
-const h5Link = computed(() =>
-  linkVariants.value.find((item) => item.type === 2)?.url || linkVariants.value.find((item) => item.type === 1)?.url,
-);
-const deeplink = computed(() => linkVariants.value.find((item) => item.type === 3)?.url);
-const miniLink = computed(() => linkVariants.value.find((item) => item.type === 4)?.url);
-
-function getLinkByType(type: number) {
-  if (type === 2) return h5Link.value;
-  if (type === 3) return deeplink.value;
-  if (type === 4) return miniLink.value;
-  if (type === 1) return linkVariants.value.find((item) => item.type === 1)?.url;
-  return undefined;
+function getLinkByType(type: LinkSemanticType) {
+  const code = LINK_TYPE_MAP[type];
+  if (linksByType.value[code]) return linksByType.value[code];
+  const variant = linkVariants.value.find((item) => item.type === code)?.url;
+  if (variant) return variant;
+  if (type === 'H5_SHORT') {
+    return linkVariants.value.find((item) => item.type === 1)?.url ?? linkVariants.value[0]?.url;
+  }
+  if (type === 'H5_LONG') {
+    return linkVariants.value.find((item) => item.type === 2)?.url ?? linkVariants.value[0]?.url;
+  }
+  return linkVariants.value[0]?.url;
 }
 
-async function handleAction(linkType: number, shouldOpen = true) {
+async function handleLinkAction(linkType: LinkSemanticType, shouldOpen = true) {
+  if (!detail.value) return;
   const existing = getLinkByType(linkType);
-  if (existing && shouldOpen && linkType !== 1) {
+  if (existing && shouldOpen && linkType !== 'H5_LONG') {
     openLink(existing);
     return;
   }
+  await fetchLinks(linkType, shouldOpen);
+}
+
+async function fetchLinks(linkType: LinkSemanticType, shouldOpen: boolean) {
   if (!detail.value) return;
-  linkLoading.value = linkType;
+  const code = LINK_TYPE_MAP[linkType];
+  linkLoading.value = code;
   try {
-    const result = await fetchLinkVariant(platformCode.value, activityId.value, linkType);
-    console.log('result', result);
+    const result = await fetchLinkVariant(platformCode.value, activityId.value, code);
     if (result.linkVariants.length) {
       linkVariants.value = result.linkVariants;
     }
     if (result.qrcodes.length) {
       qrcodes.value = result.qrcodes;
     }
-    if (linkType === 1) {
+    linksByType.value = { ...linksByType.value, ...result.linksByType };
+    if (detail.value) {
+      detail.value = {
+        ...detail.value,
+        appLink: result.appLink ?? detail.value.appLink,
+        miniProgramPath: result.miniProgramPath ?? detail.value.miniProgramPath,
+      };
+    }
+    if (linkType === 'H5_LONG') {
       prefetchedQr = true;
     } else if (shouldOpen) {
       const link = getLinkByType(linkType);
       if (link) openLink(link);
+      else showToast({ type: 'fail', message: '暂无可用链接' });
     }
   } catch (error) {
     const info = toDisplayMessage(error);
@@ -209,12 +243,30 @@ async function handleAction(linkType: number, shouldOpen = true) {
   }
 }
 
+async function handleOpenApp() {
+  const direct = detail.value?.appLink || linksByType.value[LINK_TYPE_MAP.APP];
+  if (direct) {
+    openLink(direct);
+    return;
+  }
+  await fetchLinks('APP', true);
+}
+
+async function handleOpenMiniProgram() {
+  const direct = detail.value?.miniProgramPath || linksByType.value[LINK_TYPE_MAP.MINI_PROGRAM];
+  if (direct) {
+    openLink(direct);
+    return;
+  }
+  await fetchLinks('MINI_PROGRAM', true);
+}
+
 watch(
   () => ({ ready: Boolean(detail.value), hasQr: qrcodes.value.length > 0 }),
   (state) => {
     if (state.ready && !state.hasQr && !prefetchedQr && !linkLoading.value) {
       prefetchedQr = true;
-      handleAction(1, false);
+      handleLinkAction('H5_LONG', false);
     }
   },
   { immediate: true },
