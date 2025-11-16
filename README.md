@@ -68,7 +68,7 @@ pnpm --filter backend dev
 cp .env.example apps/frontend/.env
 ```
 
-前端变量以 `VITE_` 前缀注入浏览器：
+前端变量以 `VITE_` 前缀注入浏览器。Vite 已配置 `envDir` 指向仓库根目录，可直接在根目录创建 `.env`、`.env.development` 等文件（当然也可在 `apps/frontend` 下单独放置）：
 
 ```
 VITE_RUNTIME_MODE=frontend        # frontend：直接调用折淘客；backend：交由 Fastify 代理
@@ -92,7 +92,7 @@ ALLOWED_ORIGINS=http://localhost:5173
 ## 运行模式切换
 
 1. **纯前端模式**（默认）：在“密钥配置”页面填写折淘客凭证，所有请求由浏览器发起，alova IndexedDB 缓存 30 分钟。
-2. **前后端分离模式**：将 `VITE_RUNTIME_MODE` 设为 `backend` 并配置 `VITE_API_BASE_URL`（若同源可置空）。此时前端转发到 Fastify，后端负责签名、缓存、脱敏，前端无需填写密钥即可拉取活动。
+2. **前后端分离模式**：将 `VITE_RUNTIME_MODE` 设为 `backend` 并配置 `VITE_API_BASE_URL`（若同源可置空）。此时前端转发到 Fastify，后端负责签名、缓存、脱敏，前端无需填写密钥即可拉取活动。页面将显示“后端缓存管理”面板，可一键清理所有缓存或按平台调用 `DELETE /api/cache`。
 
 两种模式可在 UI TabBar 中的“密钥配置”页随时切换。
 

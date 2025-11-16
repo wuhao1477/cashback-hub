@@ -1,4 +1,5 @@
 import type { ActivityDetail, ActivityListResult, PlatformCode } from '@/types/activity';
+import type { ApiResponse } from '@/types/api';
 import { createPlatform, supportedPlatforms } from '@/services/platforms/factory';
 import type { ActivityListQuery } from '@/services/platforms/types';
 import { useConfigStore } from '@/stores/config';
@@ -59,19 +60,11 @@ export async function fetchActivityDetail(platform: PlatformCode, id: string): P
   }
 }
 
-interface BackendResponse<T> {
-  code: number;
-  message: string;
-  data: T;
-  traceId: string;
-  timestamp: string;
-}
-
 async function fetchListFromBackend(
   platform: PlatformCode,
   options: Partial<Omit<ActivityListQuery, 'traceId'>>,
 ) {
-  const method = http.Get<BackendResponse<ActivityListResult>>(`/api/activities/${platform}`, {
+  const method = http.Get<ApiResponse<ActivityListResult>>(`/api/activities/${platform}`, {
     params: {
       page: options.page ?? 1,
       pageSize: options.pageSize ?? DEFAULT_PAGE_SIZE,
@@ -86,7 +79,7 @@ async function fetchListFromBackend(
 }
 
 async function fetchDetailFromBackend(platform: PlatformCode, id: string) {
-  const method = http.Get<BackendResponse<ActivityDetail>>(`/api/activities/${platform}/${id}`);
+  const method = http.Get<ApiResponse<ActivityDetail>>(`/api/activities/${platform}/${id}`);
   const payload = await method;
   if (payload.code !== 0) {
     throw new PlatformRequestError(payload.message || '活动详情请求失败', payload.traceId);
