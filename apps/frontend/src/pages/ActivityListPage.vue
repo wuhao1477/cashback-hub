@@ -68,7 +68,30 @@ import { toDisplayMessage } from '@/utils/errors';
 const router = useRouter();
 const configStore = useConfigStore();
 const platformMetas = getPlatformMetas();
-const activePlatform = ref<PlatformCode>(platformMetas[0].code);
+
+// Tab状态持久化
+const TAB_STATE_KEY = 'cashback-hub:active-platform';
+function loadActiveTab(): PlatformCode {
+  try {
+    const saved = localStorage.getItem(TAB_STATE_KEY);
+    if (saved && platformMetas.some(meta => meta.code === saved)) {
+      return saved as PlatformCode;
+    }
+  } catch (error) {
+    console.warn('读取tab状态失败', error);
+  }
+  return platformMetas[0].code;
+}
+
+function saveActiveTab(platform: PlatformCode) {
+  try {
+    localStorage.setItem(TAB_STATE_KEY, platform);
+  } catch (error) {
+    console.warn('保存tab状态失败', error);
+  }
+}
+
+const activePlatform = ref<PlatformCode>(loadActiveTab());
 const items = ref<ActivitySummary[]>([]);
 const loading = ref(false);
 const refreshing = ref(false);
@@ -98,7 +121,8 @@ watch(needConfig, (value) => {
 
 watch(
   () => activePlatform.value,
-  () => {
+  (newPlatform) => {
+    saveActiveTab(newPlatform);
     resetState();
     if (!needConfig.value) {
       handleLoad();
@@ -172,31 +196,67 @@ function handleSecretTap() {
 <style scoped>
 .page__nav {
   cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s ease;
+}
+
+.page__nav:active {
+  opacity: 0.8;
 }
 
 .page__notice {
-  margin: 12px 0;
+  margin: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  box-shadow: var(--shadow-sm);
 }
 
 .list-gap {
   margin-bottom: 12px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .error-card {
   margin-top: 16px;
-  border: 1px solid rgba(248, 113, 113, 0.4);
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.8), rgba(255, 255, 255, 0.9));
 }
 
 .error-card__title {
-  margin: 0;
+  margin: 0 0 8px;
   font-size: 16px;
   font-weight: 600;
+  color: var(--danger-color);
 }
 
-.error-card__message,
-.error-card__trace {
+.error-card__message {
   margin: 4px 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.error-card__trace {
+  margin: 8px 0 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  background: rgba(239, 68, 68, 0.05);
+  padding: 6px 10px;
+  border-radius: 6px;
+  word-break: break-all;
 }
 </style>

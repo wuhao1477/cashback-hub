@@ -7,12 +7,22 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   --surface-base: #f8fafc;
   --surface-card: #ffffff;
   --surface-muted: #f1f5f9;
   --border-color: #e2e8f0;
-  --text-secondary: #475569;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
   --brand-color: #0f172a;
+  --brand-light: #1e293b;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 *, *::before, *::after {
@@ -24,6 +34,7 @@ body {
   min-height: 100vh;
   background: var(--surface-base);
   color: #0f172a;
+  overflow-x: hidden;
 }
 
 a {
@@ -41,20 +52,40 @@ img {
 
 .page {
   padding: 16px 16px 80px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .section-card {
   background: var(--surface-card);
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-md);
   margin-top: 16px;
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.section-card:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .section-title {
   margin: 0 0 12px;
   font-size: 18px;
   font-weight: 600;
+  color: var(--brand-color);
+  letter-spacing: -0.01em;
 }
 
 .text-secondary {
@@ -65,6 +96,49 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* 滚动条样式优化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* 选中文本样式 */
+::selection {
+  background-color: rgba(99, 102, 241, 0.2);
+  color: var(--brand-color);
+}
+
+/* 导航栏返回按钮放大 */
+:deep(.van-nav-bar__arrow) {
+  font-size: 20px !important;
+  color: #ffffff;
+}
+
+:deep(.van-nav-bar .van-icon) {
+  font-size: 20px;
+}
+
+/* 增加返回按钮的点击区域 */
+:deep(.van-nav-bar__left) {
+  padding: 0 20px;
+  min-width: 60px;
 }
 
 @media (min-width: 960px) {

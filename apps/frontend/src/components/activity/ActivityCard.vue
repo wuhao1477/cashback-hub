@@ -45,7 +45,23 @@ const coverBackground = computed(() =>
   background: var(--surface-card);
   border-radius: 16px;
   padding: 12px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.activity-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--border-color);
+}
+
+.activity-card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
 }
 
 .activity-card__thumb {
@@ -59,6 +75,14 @@ const coverBackground = computed(() =>
   flex-direction: column;
   gap: 4px;
   padding: 8px;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+}
+
+.activity-card:hover .activity-card__thumb {
+  transform: scale(1.05);
 }
 
 .activity-card__body {
@@ -70,6 +94,12 @@ const coverBackground = computed(() =>
   margin: 0 0 6px;
   font-size: 16px;
   font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .activity-card__deadline {
@@ -106,9 +136,17 @@ const coverBackground = computed(() =>
 }
 
 .activity-card__tag {
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11px;
   background: var(--surface-muted);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.activity-card:hover .activity-card__tag {
+  background: var(--border-color);
 }
 </style>

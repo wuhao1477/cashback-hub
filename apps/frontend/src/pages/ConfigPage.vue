@@ -23,6 +23,14 @@
         </van-field>
         <van-cell title="当前状态" :value="modeHint" />
       </van-cell-group>
+      <div class="mode-tips">
+        <p v-if="runtimeMode === 'frontend'" class="mode-tip mode-tip--warning">
+          💡 纯前端模式：浏览器直接调用折淘客API，需要配置密钥，密钥存储在本地浏览器中。
+        </p>
+        <p v-else class="mode-tip mode-tip--info">
+          💡 前后端分离模式：通过后端代理请求，后端负责签名和缓存，前端无需配置密钥。
+        </p>
+      </div>
     </section>
 
     <section class="section-card">
@@ -93,7 +101,7 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { reactive, ref, computed, watch } from 'vue';
+import { reactive, ref, computed, watch, onBeforeUnmount } from 'vue';
 import { showToast } from 'vant';
 
 import { PLATFORM_OPTIONS } from '@/constants/platforms';
@@ -109,6 +117,14 @@ const runtimeMode = ref<RuntimeMode>(configStore.runtimeMode);
 const saving = ref(false);
 const cacheLoading = ref<string | null>(null);
 const platformOptions = PLATFORM_OPTIONS;
+let saveTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+onBeforeUnmount(() => {
+  if (saveTimeoutId !== null) {
+    clearTimeout(saveTimeoutId);
+    saveTimeoutId = null;
+  }
+});
 
 const lastSyncedLabel = computed(() => {
   if (!configStore.lastSyncedAt) return '尚未同步';
@@ -127,14 +143,26 @@ watch(
 );
 
 function handleSubmit() {
+  // 前端模式下验证必填字段
+  if (runtimeMode.value === 'frontend') {
+    if (!form.appkey || !form.sid) {
+      showToast({ type: 'fail', message: '请填写 AppKey 和 SID' });
+      return;
+    }
+  }
+  
   saving.value = true;
-  setTimeout(() => {
+  if (saveTimeoutId !== null) {
+    clearTimeout(saveTimeoutId);
+  }
+  saveTimeoutId = setTimeout(() => {
     if (runtimeMode.value === 'frontend') {
       configStore.updateCredentials({ ...form });
     }
     configStore.updateRuntimeMode(runtimeMode.value);
     saving.value = false;
-    showToast({ type: 'success', message: '配置已更新' });
+    showToast({ type: 'success', message: '配置已更新，运行模式已保存' });
+    saveTimeoutId = null;
   }, 250);
 }
 
@@ -193,5 +221,29 @@ async function handleInvalidate(platform?: PlatformCode) {
   align-items: center;
   gap: 8px;
   font-weight: 500;
+}
+
+.mode-tips {
+  margin-top: 12px;
+}
+
+.mode-tip {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mode-tip--warning {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(249, 115, 22, 0.05));
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.mode-tip--info {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 </style>

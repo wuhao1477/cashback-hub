@@ -15,6 +15,7 @@ interface ConfigState {
 }
 
 const STORAGE_KEY = 'cashback-hub:credentials';
+const RUNTIME_MODE_KEY = 'cashback-hub:runtime-mode';
 
 const envCredentials = resolveEnvCredentials();
 const hasEnvDefaults = Object.values(envCredentials).some((value) => Boolean(value));
@@ -37,6 +38,26 @@ function loadFromStorage(): ApiCredentials | null {
   }
 }
 
+function loadRuntimeMode(): RuntimeMode {
+  try {
+    const cached = localStorage.getItem(RUNTIME_MODE_KEY) as RuntimeMode | null;
+    if (cached === 'frontend' || cached === 'backend') {
+      return cached;
+    }
+  } catch (error) {
+    console.warn('读取运行模式失败', error);
+  }
+  return (import.meta.env.VITE_RUNTIME_MODE as RuntimeMode) || 'frontend';
+}
+
+function persistRuntimeMode(mode: RuntimeMode) {
+  try {
+    localStorage.setItem(RUNTIME_MODE_KEY, mode);
+  } catch (error) {
+    console.warn('保存运行模式失败', error);
+  }
+}
+
 function persistToStorage(data: ApiCredentials) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -48,7 +69,7 @@ function persistToStorage(data: ApiCredentials) {
 export const useConfigStore = defineStore('config', {
   state: (): ConfigState => ({
     credentials: { ...envCredentials },
-    runtimeMode: (import.meta.env.VITE_RUNTIME_MODE as RuntimeMode) || 'frontend',
+    runtimeMode: loadRuntimeMode(),
     lastSyncedAt: undefined,
   }),
   getters: {
@@ -86,6 +107,7 @@ export const useConfigStore = defineStore('config', {
     },
     updateRuntimeMode(mode: RuntimeMode) {
       this.runtimeMode = mode;
+      persistRuntimeMode(mode);
     },
     resetCredentials() {
       this.credentials = { ...resolveEnvCredentials() };

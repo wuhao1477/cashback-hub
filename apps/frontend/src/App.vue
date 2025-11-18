@@ -18,12 +18,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 
-const themeVars = {
+// 使用 Object.freeze 冻结主题配置，提升性能
+const themeVars = Object.freeze({
   navBarBackgroundColor: '#0f172a',
   navBarTitleTextColor: '#ffffff',
   tabbarItemActiveColor: '#0f172a',
   tabbarBackgroundColor: '#ffffff',
-};
+  tabbarHeight: '50px',
+});
 </script>
 
 <style scoped>
@@ -39,9 +41,13 @@ const themeVars = {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.fade-slide-enter-from,
-.fade-slide-leave-to {
+.fade-slide-enter-from {
   opacity: 0;
   transform: translateY(6px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 </style>
