@@ -1,0 +1,2209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>淘宝京东美团唯品会考拉饿了么拼多多抖音工具商API接口</title>
+    <meta name="keywords" content="淘宝京东美团唯品会考拉饿了么拼多多抖音工具商API接口" />
+    <meta name="description" content="淘宝京东美团唯品会考拉饿了么拼多多抖音工具商API接口" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="/css/api.css" />
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/jquery.touchSlider.js"></script>
+    <script type="text/javascript" src="/js/function5.js"></script>
+    <script type="text/javascript" src="/js/api.js"></script>
+    <link href="/css/quan_common.css" rel="stylesheet" />
+</head>
+<body>
+    
+
+
+<div id="docsapiContent" class="clearfix">
+    <div id="docs_api_main" style="width: 1200px;">
+        <div class="api_data" style="padding-left: 0px; min-height: 110px;">
+            <div class="api_data_info">
+                <h2 style="font-size: 24px; text-align: center;">
+                    <strong>淘宝京东美团唯品会考拉饿了么拼多多抖音工具商API接口（永久免费）</strong>
+                </h2>
+                <p class="doc_api_decsP" style="height: 100px; line-height: 28px; font-size: 14px; margin-top: 10px;">
+                    <font color="red">接口包括：“京东转链API-新”、“京东转链API”、“京东商品详情API[简版]”、“京东商品详情API[详版]”、“京东精选商品API”、“朋友圈火爆商品API”、“京东订单查询API”。 </font>
+                    <br>
+                    <font color="red">“美团转链API”、“美团订单查询API”、“饿了么转链API”、“饿了么订单查询API”、“拼多多转链API”、“拼多多授权备案API”、“拼多多授权备案查询API”。 </font>
+                    <br>
+                    <font color="red">“唯品会转链API”、“唯品会账号授权API”、“唯品会获取授权列表API”、“唯品会获取订单列表API”、“唯品会商品详情API”、“唯品会线报接口API”、“唯品会精编商品文案API”。 </font>
+                    <br>
+                    
+                    <font color="red">技术支持QQ号：83076790，淘宝京东美团唯品会考拉等所有API接口永久免费。</font>
+                    <br />
+                    <font color="red"><a href="http://www.zhetaoke.com/user/open/open_default.html" target="_blank">点击这里访问淘宝联盟工具商接口。</a></font>
+                </p>
+            </div>
+        </div>
+        <!--tab-->
+        <div class="docs_api_tab">
+            <ul class="tabul clearfix">
+                <li id="apilists" class="active">API</li>
+                <li id="errorcode" class="">错误码参照</li>
+                <li id="apicontact" class="">其他相关</li>
+            </ul>
+        </div>
+        <div class="tabDiv">
+            <!--api-->
+            <div style="padding-left: 0px; display: none;" class="docs_api_show clearfix">
+                <ul class="das_left">
+                    <li><a class="tableNav " href="javascript:;" title="抖音商品转链API" data-rel="70"><font color="purple">1、抖音商品转链API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音商品详情API" data-rel="71"><font color="purple">2、抖音商品详情API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音商品搜索API" data-rel="72"><font color="purple">3、抖音商品搜索API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音口令解析API" data-rel="73"><font color="purple">4、抖音口令解析API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音直播间转链API" data-rel="75"><font color="purple">6、抖音直播间转链API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音活动转链API" data-rel="76"><font color="purple">7、抖音活动转链API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音活动转链API" data-rel="77"><font color="purple">8、抖音活动列表API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音直播间达人列表API" data-rel="78"><font color="purple">9、抖音直播间达人列表API</font></a></li>
+                    <li><a class="tableNav" href="javascript:;" title="抖音直播间商品列表API" data-rel="79"><font color="purple">10、抖音直播间商品列表API</font></a></li>
+                </ul>
+                <div data-rel="70" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音商品转链API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian.ashx?appkey=&sid=&product_url=&external_info=</span>
+                    </div>
+                    <font color="red">抖音商品转链API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">product_url
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>商品URL/口令/短链接。<br />
+                                        <font color="red">重要的事情说三遍：该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">external_info
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>自定义字段，只允许数字，限制长度为11位,返利专用字段，不返利不要填写。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">need_qr_code
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>是否需要二维码，需要会导致响应耗时增加，true或者false，默认false。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">use_coupon
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>是否返回商品惠后价领券链接(如果商品有优惠则返回，否则不返回)，true或者false，默认false。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">need_share_link
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>是否返回站外H5链接，true或者false，默认false。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1464" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1464" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1464" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "data": {
+      "coupon_link": {
+        "coupon_status": "0",
+        "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674",
+        "qrcode": {
+          "height": "360",
+          "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+          "width": "360"
+        },
+        "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+        "share_link": "https://alliance.jinritemai.com"
+      },
+      "dy_deeplink": "nssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927&so",
+      "dy_password": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+      "dy_zlink": "https://z.douyin.com/xxxxxxx",
+      "qr_code": {
+        "height": "360",
+        "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+        "width": "360"
+      },
+      "share_link": "https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=",
+      "use_ins_activity": "0"
+    }
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="71" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音商品详情API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_product_detail.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_product_detail.ashx?appkey=&sid=&product_ids=</span>
+                    </div>
+                    <font color="red">抖音商品详情API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">product_ids
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>商品 ID 列表(最多20个),用英文逗号分割。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">fields
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>值为：base_info,promotion_info （需要返回的字段，多个用英文逗号隔开。不传只返回商品基础信息，强烈建议按需获取数据）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/2867" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/2867" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/2867" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "products": [
+      {
+        "activity_info": {
+          "activity_type": "1",
+          "success": "true"
+        },
+        "base_info": {
+          "category_id": "2",
+          "category_name": "玩具乐器",
+          "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+          "detail_url": "https://haohuo.jinritemai.com/views/product/item2?id=3400312511185213726",
+          "first_cid": "11",
+          "imgs": "[轮播图]",
+          "in_stock": "true",
+          "price": "100",
+          "product_id": "3461984765147123",
+          "sales": "100",
+          "second_cid": "2011",
+          "success": "true",
+          "third_cid": "3040",
+          "title": "商品名称"
+        },
+        "brand_info": {
+          "brand_id": "237461",
+          "brand_name_cn": "品牌名",
+          "brand_name_en": "brand_name",
+          "success": "true"
+        },
+        "comment_info": {
+          "comment_num": "2321",
+          "comment_score": "2",
+          "success": "true"
+        },
+        "coupon_info": {
+          "available_coupons": [
+            {
+              "apply_end_time": "2016-01-01 12:00:00",
+              "apply_start_time": "2016-01-01 12:00:00",
+              "coupon_type": "1",
+              "discount_desc": "满20减1",
+              "type_desc": "平台券",
+              "use_end_time": "2016-01-01 12:00:00",
+              "use_start_time": "2016-01-01 12:00:00",
+              "valid_period": "3600",
+              "validity_type": "1"
+            }
+          ],
+          "coupon_price": "100",
+          "success": "true"
+        },
+        "detail_brief": {
+          "component_info": [
+            {
+              "image": {
+                "height": "400",
+                "pic_url": "https://p6-item.ecombdimg.com/img/ecom-shop-material/EMNEddDN_m_ffdc461d338f14893f98a41a76173528_sx_113416_www750-1000~tpmsx3fupr-resize:750:1000.jpeg",
+                "width": "400"
+              }
+            }
+          ],
+          "success": "true"
+        },
+        "logistics_info": {
+          "post_free": "true",
+          "success": "true",
+          "text": "48小时内从浙江省发货 运费3元起"
+        },
+        "month_sale_data": {
+          "daily_statistics": [
+            {
+              "date": "20210101",
+              "kol_num": "100",
+              "order_num": "1000",
+              "view_num": "100"
+            }
+          ],
+          "kol_num": "1000",
+          "order_num": "1000",
+          "success": "true",
+          "view_num": "1000"
+        },
+        "presell_info": {
+          "presell_type": "0",
+          "success": "true"
+        },
+        "promotion_info": {
+          "cos_fee": "100",
+          "cos_ratio": "10",
+          "success": "true"
+        },
+        "qualification_info": {
+          "has_sxt": "true",
+          "success": "true"
+        },
+        "rights_info": {
+          "is_assured": "true",
+          "success": "true"
+        },
+        "share_info": {
+          "sharable": "true",
+          "success": "true"
+        },
+        "shop_info": {
+          "shop_id": "25316",
+          "shop_name": "店铺名称",
+          "shop_total_score": {
+            "logistics_score": {
+              "level": "1",
+              "score": "4.95",
+              "text": "物流体验分"
+            },
+            "product_score": {
+              "level": "1",
+              "score": "4.95",
+              "text": "商品体验分"
+            },
+            "service_score": {
+              "level": "1",
+              "score": "4.95",
+              "text": "商家服务分"
+            },
+            "shop_score": {
+              "level": "1",
+              "score": "4.95",
+              "text": "商家体验分"
+            }
+          },
+          "success": "true"
+        },
+        "tags": {
+          "has_douin_goods_tag": "true",
+          "has_shop_brand_tag": "true",
+          "has_subsidy_tag": "true",
+          "has_supermarket_tag": "true",
+          "success": "true"
+        },
+        "trade_info": {
+          "limit_min_sale": "false",
+          "success": "true"
+        }
+      }
+    ]
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="72" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音商品搜索API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_product_search.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_product_search.ashx?appkey=&sid=&title=</span>
+                    </div>
+                    <font color="red">抖音商品搜索API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">title
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>商品标题，返回标题中包含某个关键词的商品。<br />
+                                        <font color="red">重要的事情说三遍：该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">first_cids
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选商品一级类目
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">second_cids
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选商品二级类目
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">third_cids
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选商品三级类目
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">price_min
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选价格区间-最小值（单位为分）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">price_max
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选价格区间-最大值（单位为分）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sell_num_min
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选历史销量区间-最小值
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sell_num_max
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选历史销量区间-最大值
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">search_type
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>召回结果排序条件，0默认排序1历史销量排序2价格排序3佣金金额排序4佣金比例排序；
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sort_type
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>排序顺序（0升序1降序）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">cos_fee_min
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选普通佣金区间-最小值（单位为分）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">cos_fee_max
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选普通佣金区间-最大值（单位为分）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">cos_ratio_min
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选普通佣金率区间-最小值 （乘100，例如1.1%为110）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">cos_ratio_max
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>筛选普通佣金率区间-最大值（乘100，例如1.1%为110）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>分页（从1开始）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page_size
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>每页的数量（小于等于20）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">share_status
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>获取商品分销状态。1: 仅返回可分销商品；0:返回全量商品
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">tag
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>商品标签。 0:返回全量商品; 1:返回超值购商品; 2:返回抖音超市(次日达)商品
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/924" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/924" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/924" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "products": [
+      {
+        "activity_id": "1",
+        "available_coupons": [
+          {
+            "apply_end_time": "2016-01-01 13:00:00",
+            "apply_start_time": "2016-01-01 12:00:00",
+            "coupon_type": "1",
+            "discount_desc": "满20减1",
+            "type_desc": "平台券",
+            "use_end_time": "2016-01-01 13:00:00",
+            "use_start_time": "2016-01-01 12:00:00",
+            "valid_period": "3600",
+            "validity_type": "1"
+          }
+        ],
+        "cos_fee": "1",
+        "cos_ratio": "10",
+        "coupon_price": "92",
+        "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+        "detail_url": "https://haohuo.jinritemai.com/views/product/item2?id=3400312511185213726",
+        "first_cid": "1206",
+        "in_stock": "1",
+        "limit_min_sale": "false",
+        "post_free": "true",
+        "presell_type": "0",
+        "price": "100",
+        "product_id": "3400312511185213726",
+        "sales": "1234",
+        "second_cid": "1402",
+        "sharable": "true",
+        "shop_id": "2232",
+        "shop_name": "maggie测试小铺",
+        "third_cid": "2634",
+        "title": "测试商品"
+      }
+    ],
+    "total": "1000"
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="73" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音口令解析API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_kouling_jiexi.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_kouling_jiexi.ashx?appkey=&sid=&command=</span>
+                    </div>
+                    <font color="red">抖音口令解析API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">command
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>口令/短链接。<br />
+                                        <font color="red">重要的事情说三遍：该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/4010" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/4010" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/4010" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "command_info": {
+      "activity_info": {
+        "extra_params": "{\"product_id\":\"12345678\"}\"",
+        "material_id": "123456",
+        "share_info": {
+          "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927",
+          "qrcode": {
+            "height": "360",
+            "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+            "width": "360"
+          },
+          "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+          "zlink": "https://z.douyin.com/xxxxxxx"
+        }
+      },
+      "command_type": "1",
+      "live_appoint_info": {
+        "author_buyin_id": "112233",
+        "live_appointment_id": "123456",
+        "share_info": {
+          "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927",
+          "qrcode": {
+            "height": "360",
+            "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+            "width": "360"
+          },
+          "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη"
+        }
+      },
+      "live_info": {
+        "author_buyin_id": "112233",
+        "product_id": "123456",
+        "share_info": {
+          "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927",
+          "qrcode": {
+            "height": "360",
+            "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+            "width": "360"
+          },
+          "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+          "zlink": "https://z.douyin.com/xxxxxxx"
+        }
+      },
+      "product_info": {
+        "ins_activity_param": "abc",
+        "product_id": "123456",
+        "share_info": {
+          "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927",
+          "qrcode": {
+            "height": "360",
+            "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+            "width": "360"
+          },
+          "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+          "share_link": "https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=",
+          "zlink": "https://z.douyin.com/xxxxxxx"
+        }
+      },
+      "redpack_info": {
+        "redpack_id": "123456",
+        "share_info": {
+          "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927",
+          "qrcode": {
+            "height": "360",
+            "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+            "width": "360"
+          },
+          "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη"
+        }
+      }
+    }
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="75" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音直播间转链API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian_zhibojian.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian_zhibojian.ashx?appkey=&sid=&buyin_id=</span>
+                    </div>
+                    <font color="red">抖音直播间转链API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">buyin_id
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>主播百应ID (buyinId和dy_code最少填一项)
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">dy_code
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>直播间口令或者短链接（优先级 buyin_id > dy_code）） (buyinId和dy_code最少填一项)<br />
+                                        <font color="red">重要的事情说三遍：该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！该参数需要进行Urlencode编码！</font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">external_info
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>自定义字段，只允许数字，限制长度为11位,返利专用字段，不返利不要填写。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1297" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1297" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1297" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "data": {
+      "dy_deeplink": "snssdk://live..",
+      "dy_password": "6.923405940",
+      "dy_zlink": "https://z.douyin.com/xxxxxxx",
+      "qr_code": {
+        "height": "200",
+        "url": "https://ssddsd.jpg",
+        "width": "200"
+      }
+    }
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="76" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音活动转链API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian_activity.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhuanlian_activity.ashx?appkey=&sid=&material_id=</span>
+                    </div>
+                    <font color="red">抖音活动转链API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">material_id
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>活动页物料ID
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">external_info
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>自定义字段，只允许数字，限制长度为11位,返利专用字段，不返利不要填写。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">need_qr_code
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>是否需要二维码，需要会导致响应耗时增加，true或者false，默认false。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3130" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3130" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3130" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "data": {
+      "dy_deeplink": "snssdk://live..",
+      "dy_password": "6.923405940",
+      "dy_zlink": "https://z.douyin.com/xxxxxxx",
+      "qr_code": {
+        "height": "200",
+        "url": "https://ssddsd.jpg",
+        "width": "200"
+      }
+    }
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="77" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音活动列表API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_activity_list.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_activity_list.ashx?appkey=&sid=&page=1&page_size=20</span>
+                    </div>
+                    <font color="red">抖音活动列表API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>分页（从1开始）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page_size
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>每页的数量（小于等于20）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">activity_status
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>活动状态（不填默认返回进行中活动，1:待开始，2:进行中，3: 已结束）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3129" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3129" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/3129" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "activity_material_list": [
+      {
+        "activity_id": "1000",
+        "activity_main_cover": "https://xxxxxx/xxx",
+        "activity_name": "超值购",
+        "activity_preview_cover": "https://xxxxxx/xxx",
+        "activity_promotion_asset": "https://xxxxxx/xxx",
+        "activity_promotion_cover": "https://xxxxxx/xxx",
+        "activity_rule": "活动推广规则",
+        "activity_rule_link": "https://xxxxxx/xxx",
+        "activity_status": "2",
+        "activity_type": "0",
+        "activity_validity_type": "0",
+        "end_time": "1234567890",
+        "material_id": "7208154716478685497",
+        "start_time": "1234567890"
+      }
+    ],
+    "total": "100"
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div data-rel="78" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音直播间达人列表API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhibojian_dare_list.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_zhibojian_dare_list.ashx?appkey=&sid=</span>
+                    </div>
+                    <font color="red">抖音直播间达人列表API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">author_type
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>1 品牌 2 达人(默认值)<br />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">author_levels
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>作者电商等级，0-7级
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">frist_cids
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>商品行业类目，列表类型；使用【/alliance/activityProductCategoryList】接口获取
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">author_info
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>达人昵称或者账号
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>分页，1开始
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">page_size
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>分页大小
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sort_by
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>排序字段: 1-综合；2-销量；3-佣金率；4-粉丝数
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sort_type
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>排序方式：0-降序；1-升序
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">live_status
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>开关播状态：0:所有，1:开播，2:关播
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1396" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1396" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1396" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "data": {
+      "coupon_link": {
+        "coupon_status": "0",
+        "deeplink": "snssdk1128://ec_goods_detail/?promotion_id=3471556980941674",
+        "qrcode": {
+          "height": "360",
+          "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+          "width": "360"
+        },
+        "share_command": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+        "share_link": "https://alliance.jinritemai.com"
+      },
+      "dy_deeplink": "nssdk1128://ec_goods_detail/?promotion_id=3471556980941674&kol_id=99575927&so",
+      "dy_password": "长按覆[呲牙]zhi此条消息，咑[玫瑰]搜[烟花]，查看商品详情Ig9FOHrrl8ηη",
+      "dy_zlink": "https://z.douyin.com/xxxxxxx",
+      "qr_code": {
+        "height": "360",
+        "url": "https://p3.douyinpic.com/img/aweme-qrcode/PqFhya700510763792421~c5_360x360.webp?from=1723184",
+        "width": "360"
+      },
+      "share_link": "https://haohuo.jinritemai.com/ecommerce/trade/detail/index.html?id=",
+      "use_ins_activity": "0"
+    }
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-rel="79" class="das_right" style="width: 999px;">
+                    <div class="simpleline">
+                        <strong>接口名称：</strong><font color="blue">抖音直播间商品列表API</font>
+                    </div>
+                    <div class="simpleline">
+                        <strong>接口地址：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_distributionLive_productlist.ashx</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>支持格式：</strong><span class="url">json</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求方式：</strong><span class="url">get或者post</span>
+                    </div>
+                    <div class="simpleline">
+                        <strong>请求示例：</strong><span class="url">https://api.zhetaoke.com:10001/api/open_douyin_distributionLive_productlist.ashx?appkey=&sid=&author_buyin_id=</span>
+                    </div>
+                    <font color="red">抖音直播间商品列表API。</font>
+                    <br />
+                    <br />
+
+                    <div class="simpleline simpleTable">
+                        <strong>请求参数说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="150">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th width="60">必填
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">appkey
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>折淘客对接秘钥appkey，折淘客通用。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">sid
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">是
+                                    </td>
+                                    <td>对应的淘客账号授权SID。
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">author_buyin_id
+                                    </td>
+                                    <td class="url">String
+                                    </td>
+                                    <td class="url">否
+                                    </td>
+                                    <td>主播的百应ID<br />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td class="url"></td>
+                                    <td>
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1770" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1770" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                        <font color="red"><a href="https://op.jinritemai.com/docs/api-docs/61/1770" target="_blank">点击这里查看官方接口说明！点击这里查看官方接口说明！点击这里查看官方接口说明！</a></font>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <strong>相关说明：</strong>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <th width="20"></th>
+                                    <th width="200">名称
+                                    </th>
+                                    <th width="80">类型
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="simpleline simpleTable">
+                        <b>JSON返回示例：</b>
+                        <div class="prediv">
+                            <pre>
+{
+  "data": {
+    "author_buyin_id": "75678931425",
+    "author_nickname": "测试用户",
+    "create_time": "1649841070",
+    "flash_products": [
+      {
+        "ads_promotion_ratio": {
+          "old_fans_ratio": "500",
+          "share_ratio": "1000"
+        },
+        "available_coupons": [
+          {
+            "coupon_type": "1",
+            "discount_desc": "满50减10券",
+            "type_desc": "平台券"
+          }
+        ],
+        "category_id": "29187",
+        "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+        "first_cid": "20018",
+        "first_cname": "零食/坚果/特产",
+        "given_products": [
+          {
+            "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+            "given_skus": [
+              {
+                "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+                "product_id": "2323109090032130190",
+                "sku_id": "2323109090032130191"
+              }
+            ],
+            "product_id": "2323109090032130190",
+            "product_name": "赠品-名称"
+          }
+        ],
+        "is_explaining": "false",
+        "list_num": "1",
+        "live_room_price": "900",
+        "price": "1000",
+        "product_id": "3094093204930502",
+        "second_cid": "20313",
+        "second_cname": "饼干/膨化",
+        "third_cid": "22977",
+        "third_cname": "饼干",
+        "title": "测试商品岩烧芝士脆饼干"
+      }
+    ],
+    "flash_products_count": "1",
+    "has_kol_coupon": "false",
+    "is_flash_live_room": "false",
+    "is_rest_assured": "false",
+    "lottery_products": [
+      {
+        "lottery_activity_id": "111112222",
+        "lottery_product_end_time": "1674970993",
+        "lottery_product_start_time": "1674960993",
+        "product_info": {
+          "ads_promotion_ratio": {
+            "old_fans_ratio": "5000",
+            "share_ratio": "1000"
+          },
+          "available_coupons": [
+            {
+              "coupon_type": "1",
+              "discount_desc": "满50减10",
+              "type_desc": "平台券"
+            }
+          ],
+          "category_id": "20098",
+          "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+          "first_cid": "20088",
+          "first_cname": "零食/坚果/特产",
+          "given_products": [
+            {
+              "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+              "given_skus": [
+                {
+                  "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+                  "product_id": "88888",
+                  "sku_id": "8888"
+                }
+              ],
+              "product_id": "88888",
+              "product_name": "测试商品"
+            }
+          ],
+          "is_explaining": "true",
+          "list_num": "1",
+          "live_room_price": "1000",
+          "price": "1000",
+          "product_id": "3094093204930502",
+          "second_cid": "20089",
+          "second_cname": "饼干/膨化",
+          "third_cid": "20099",
+          "third_cname": "饼干",
+          "title": "测试商品"
+        }
+      }
+    ],
+    "online_num": "21231",
+    "product_count": "100",
+    "products": [
+      {
+        "ads_promotion_ratio": {
+          "old_fans_ratio": "500",
+          "share_ratio": "1000"
+        },
+        "available_coupons": [
+          {
+            "coupon_type": "1",
+            "discount_desc": "满50减10券",
+            "type_desc": "平台券"
+          }
+        ],
+        "category_id": "29187",
+        "cover": "https://p6-aio.ecombdimg.com/obj/temai/6ef6ccb6699c9865be7e68c325bf22e7w",
+        "first_cid": "20018",
+        "first_cname": "零食/坚果/特产",
+        "given_products": [
+          {
+            "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+            "given_skus": [
+              {
+                "cover": "https://sf1-ttcdn-tos.pstatp.com/img/temai/Fpt8famR3twTGYz09e25nz5PbTRuwww800-800~1125x1125_q50.webp",
+                "product_id": "2323109090032130190",
+                "sku_id": "2323109090032130191"
+              }
+            ],
+            "product_id": "2323109090032130190",
+            "product_name": "赠品-名称"
+          }
+        ],
+        "is_explaining": "true",
+        "list_num": "1",
+        "live_room_price": "900",
+        "price": "1000",
+        "product_id": "3094093204930502",
+        "second_cid": "20313",
+        "second_cname": "饼干/膨化",
+        "third_cid": "22977",
+        "third_cname": "饼干",
+        "title": "测试商品岩烧芝士脆饼干"
+      }
+    ],
+    "room_id": "1292893292189385392859439"
+  },
+  "code": 10000,
+  "msg": "success",
+  "sub_code": "",
+  "sub_msg": ""
+}
+                            <font color="red" style="margin-left: -50px;"></font>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--error-->
+                <div class="docs_api_show" style="display: none;">
+                    <div class="simpleline simpleTable">
+                        <b>服务级错误码参照(error_code)：</b>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <th width="20">&nbsp;
+                                    </th>
+                                    <th width="200">错误码
+                                    </th>
+                                    <th>说明
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="url">301
+                                    </td>
+                                    <td class="text">参数错误
+                                    </td>
+                                    <!--                            <td class="url">201</td>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--other-->
+                <div class="docs_api_show" style="display: none;">
+                    <div class="simpleline simpleTable">
+                        <b>其他相关内容</b>
+                        <table class="api_table" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr class="title">
+                                    <td width="40">&nbsp;
+                                    </td>
+                                    <td width="200">内容
+                                    </td>
+                                    <td>详细
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="text">技术支持QQ号:
+                                    </td>
+                                    <td class="url">83076790
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;
+                                    </td>
+                                    <td class="text">技术支持QQ群:
+                                    </td>
+                                    <td class="url">
+                                        <a href="http://shang.qq.com/wpa/qunwpa?idkey=9518a473d023b705aa3470d1556c33017742921e58b16035cc0ffbf7fb0dec5c"
+                                            target="_blank">929760551</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function contentHg() {
+        $("#pageWraper").css({
+            "min-height": $(window).height() - $(".wraper").outerHeight(true) - $(".logo").outerHeight(true) - $(".footer").outerHeight(true)
+        })
+    }
+    $(function () {
+        contentHg();
+    })
+    $(window).resize(function () {
+        contentHg();
+    })
+    tabs(".tabul", "active", ".tabDiv");
+    //选项卡
+    function tabs(tabTit, on, tabCon) {
+        $(tabCon).each(function () {
+            $(this).children().eq(0).show();
+        });
+        $(tabTit).each(function () {
+            $(this).children().eq(0).addClass(on);
+        });
+        $(tabTit).children().click(function () {
+            $(this).addClass(on).siblings().removeClass(on);
+            var index = $(tabTit).children().index(this);
+            $(tabCon).children().eq(index).show().siblings().hide();
+        });
+    }
+</script>
+
+</body>
+</html>
