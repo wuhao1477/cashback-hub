@@ -6,7 +6,7 @@ import { useConfigStore } from '@/stores/config';
 import { createTraceId } from '@/utils/trace';
 import { PlatformRequestError } from '@/utils/errors';
 import { PLATFORM_META } from '@/constants/platforms';
-import { http } from '@/services/alova';
+import { http } from '@/services/httpClient';
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -90,7 +90,7 @@ async function fetchListFromBackend(
 }
 
 async function fetchDetailFromBackend(platform: PlatformCode, id: string, options: { linkType?: number } = {}) {
-  const method = http.Get<ApiResponse<ActivityDetail>>(`/api/activities/${platform}/${id}` , {
+  const method = http.Get<ApiResponse<ActivityDetail>>(`/api/activities/${platform}/${id}`, {
     params: options.linkType ? { linkType: options.linkType } : undefined,
   });
   const payload = await method;

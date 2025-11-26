@@ -1,5 +1,5 @@
 import { ZtkMeituanAdapter } from '@cashback/adapters';
-import { http } from '@/services/alova';
+import { http } from '@/services/httpClient';
 import type { ActivityDetail, ActivityListResult } from '@/types/activity';
 import { PlatformRequestError } from '@/utils/errors';
 import { useActivityCacheStore } from '@/stores/activityCache';

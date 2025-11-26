@@ -43,6 +43,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '密钥配置' },
   },
   {
+    path: '/link-convert',
+    name: 'link-convert',
+    component: () => import('@/pages/LinkConversionPage.vue'),
+    meta: { title: '转链工具' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/activities',
   },

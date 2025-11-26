@@ -9,8 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@cashback/adapters": "workspace:*",
     "@alova/adapter-axios": "^2",
+    "@cashback/adapters": "workspace:*",
+    "@vueuse/core": "^14.0.0",
     "alova": "^3.3.4",
     "axios": "^1",
     "crypto-js": "^4",

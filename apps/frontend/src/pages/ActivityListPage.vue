@@ -1,55 +1,63 @@
 <template>
-  <div class="page">
-    <div class="page__nav" @click="handleSecretTap">
-      <van-nav-bar title="活动列表" />
+  <div class="page-container">
+    <!-- Premium Header -->
+    <div class="g-page-header" @click="handleSecretTap">
+      <h1 class="g-page-title">活动列表</h1>
+      <p class="g-page-subtitle">发现最新优惠活动</p>
     </div>
 
-    <van-notice-bar
-      v-if="securityHint"
-      class="page__notice"
-      wrapable
-      color="#16a34a"
-      background="#dcfce7"
-    >
-      {{ securityHint }}
-    </van-notice-bar>
+    <div class="g-content-wrapper">
+      <div class="g-main-card list-card">
+        <van-notice-bar
+          v-if="securityHint"
+          class="page__notice"
+          wrapable
+          color="#10b981"
+          background="#ecfdf5"
+        >
+          {{ securityHint }}
+        </van-notice-bar>
 
-    <van-tabs v-model:active="activePlatform" type="card">
-      <van-tab v-for="meta in platformMetas" :key="meta.code" :title="meta.name" :name="meta.code" />
-    </van-tabs>
+        <van-tabs v-model:active="activePlatform" shrink animated>
+          <van-tab v-for="meta in platformMetas" :key="meta.code" :title="meta.name" :name="meta.code" />
+        </van-tabs>
 
-    <div v-if="needConfig" class="section-card">
-      <van-empty image-size="120" description="请先完成密钥配置" />
-      <van-button block type="primary" style="margin-top: 12px" @click="router.replace('/config')">去配置</van-button>
-    </div>
-
-    <van-pull-refresh v-else v-model="refreshing" @refresh="handleRefresh">
-      <van-list
-        v-model:loading="loading"
-        :finished="finished"
-        :immediate-check="false"
-        finished-text="没有更多了"
-        @load="handleLoad"
-      >
-        <template v-if="items.length">
-          <div class="list-gap" v-for="item in items" :key="item.id">
-            <ActivityCard :activity="item" @select="handleSelect" />
+        <div class="list-content">
+          <div v-if="needConfig" class="empty-state">
+            <van-empty image-size="120" description="请先完成密钥配置" />
+            <van-button block class="action-btn" @click="router.replace('/config')">去配置</van-button>
           </div>
-        </template>
-        <template v-else-if="loading">
-          <ActivitySkeleton />
-          <ActivitySkeleton />
-        </template>
-        <van-empty v-else description="暂无活动数据" />
-      </van-list>
-    </van-pull-refresh>
 
-    <section v-if="errorState" class="section-card error-card">
-      <p class="error-card__title">请求出现异常</p>
-      <p class="error-card__message">{{ errorState.message }}</p>
-      <p v-if="errorState.traceId" class="error-card__trace">Trace ID：{{ errorState.traceId }}</p>
-      <van-button plain type="danger" size="small" @click="handleRefresh">重试</van-button>
-    </section>
+          <van-pull-refresh v-else v-model="refreshing" @refresh="handleRefresh">
+            <van-list
+              v-model:loading="loading"
+              :finished="finished"
+              :immediate-check="false"
+              finished-text="没有更多了"
+              @load="handleLoad"
+            >
+              <template v-if="items.length">
+                <div class="list-gap" v-for="item in items" :key="item.id">
+                  <ActivityCard :activity="item" @select="handleSelect" />
+                </div>
+              </template>
+              <template v-else-if="loading">
+                <ActivitySkeleton />
+                <ActivitySkeleton />
+              </template>
+              <van-empty v-else description="暂无活动数据" />
+            </van-list>
+          </van-pull-refresh>
+
+          <section v-if="errorState" class="error-card">
+            <p class="error-card__title">请求出现异常</p>
+            <p class="error-card__message">{{ errorState.message }}</p>
+            <p v-if="errorState.traceId" class="error-card__trace">Trace ID：{{ errorState.traceId }}</p>
+            <van-button plain type="danger" size="small" @click="handleRefresh">重试</van-button>
+          </section>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -67,7 +75,7 @@ import { toDisplayMessage } from '@/utils/errors';
 
 const router = useRouter();
 const configStore = useConfigStore();
-const platformMetas = getPlatformMetas();
+const platformMetas = getPlatformMetas().filter(m => m.hasList);
 
 // Tab状态持久化
 const TAB_STATE_KEY = 'cashback-hub:active-platform';
@@ -194,23 +202,41 @@ function handleSecretTap() {
 </script>
 
 <style scoped>
-.page__nav {
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.2s ease;
+.page-container {
+  min-height: 100vh;
+  background-color: var(--surface-base);
+  padding-bottom: 80px;
 }
 
-.page__nav:active {
-  opacity: 0.8;
+.list-card {
+  padding: 0; /* Override default padding for full-width tabs */
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Custom Tab Styles */
+:deep(.van-tabs__nav) {
+  background: transparent;
+}
+
+:deep(.van-tab--active) {
+  font-weight: 600;
+}
+
+.list-content {
+  background: var(--surface-card);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  min-height: 400px;
+  margin-top: 16px;
 }
 
 .page__notice {
-  margin: 12px 16px;
+  margin: 0 0 16px;
   border-radius: 12px;
   font-size: 13px;
   line-height: 1.6;
-  box-shadow: var(--shadow-sm);
 }
 
 .list-gap {
@@ -229,10 +255,20 @@ function handleSecretTap() {
   }
 }
 
+.action-btn {
+  margin-top: 12px;
+  background: var(--brand-gradient);
+  border: none;
+  color: white !important;
+  border-radius: 24px;
+}
+
 .error-card {
   margin-top: 16px;
-  border: 2px solid rgba(239, 68, 68, 0.2);
-  background: linear-gradient(135deg, rgba(254, 242, 242, 0.8), rgba(255, 255, 255, 0.9));
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  background: #fef2f2;
+  padding: 16px;
+  border-radius: 12px;
 }
 
 .error-card__title {
@@ -253,8 +289,8 @@ function handleSecretTap() {
   margin: 8px 0 12px;
   font-size: 12px;
   color: var(--text-tertiary);
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  background: rgba(239, 68, 68, 0.05);
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.5);
   padding: 6px 10px;
   border-radius: 6px;
   word-break: break-all;

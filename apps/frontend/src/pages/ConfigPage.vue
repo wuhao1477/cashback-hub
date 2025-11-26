@@ -1,107 +1,128 @@
 <template>
-  <div class="page">
-    <van-nav-bar title="密钥配置" />
-
-    <van-notice-bar
-      class="page__notice"
-      wrapable
-      color="#f97316"
-      background="#fff7ed"
-      text="密钥仅保存在本地浏览器中，请勿在公共设备上启用纯前端模式"
-    />
-
-    <section class="section-card">
-      <h2 class="section-title">运行模式</h2>
-      <van-cell-group inset>
-        <van-field label="运行模式">
-          <template #input>
-            <van-radio-group v-model="runtimeMode" direction="horizontal">
-              <van-radio name="frontend">纯前端</van-radio>
-              <van-radio name="backend">前后端分离</van-radio>
-            </van-radio-group>
-          </template>
-        </van-field>
-        <van-cell title="当前状态" :value="modeHint" />
-      </van-cell-group>
-      <div class="mode-tips">
-        <p v-if="runtimeMode === 'frontend'" class="mode-tip mode-tip--warning">
-          💡 纯前端模式：浏览器直接调用折淘客API，需要配置密钥，密钥存储在本地浏览器中。
-        </p>
-        <p v-else class="mode-tip mode-tip--info">
-          💡 前后端分离模式：通过后端代理请求，后端负责签名和缓存，前端无需配置密钥。
-        </p>
+  <div class="page-container">
+    <!-- Premium Header -->
+    <div class="g-page-header">
+      <div class="header-nav">
+        <van-icon name="arrow-left" class="back-icon" @click="router.back()" />
+        <h1 class="g-page-title">系统配置</h1>
       </div>
-    </section>
+      <p class="g-page-subtitle">管理运行模式与密钥配置</p>
+    </div>
 
-    <section class="section-card">
-      <h2 class="section-title">密钥管理</h2>
-      <van-form @submit="handleSubmit">
-        <van-field
-          v-model="form.appkey"
-          name="appkey"
-          label="AppKey"
-          placeholder="请输入折淘客 AppKey"
-          :disabled="runtimeMode === 'backend'"
-          required
+    <div class="g-content-wrapper">
+      <div class="g-main-card config-card">
+        <van-notice-bar
+          class="page__notice"
+          wrapable
+          color="#f97316"
+          background="#fff7ed"
+          text="密钥仅保存在本地浏览器中，请勿在公共设备上启用纯前端模式"
         />
-        <van-field
-          v-model="form.sid"
-          name="sid"
-          label="SID"
-          placeholder="请输入 SID"
-          :disabled="runtimeMode === 'backend'"
-          required
-        />
-        <van-field
-          v-model="form.customerId"
-          name="customerId"
-          label="客户 ID"
-          placeholder="可选：若折淘客账号要求可填写"
-          :disabled="runtimeMode === 'backend'"
-        />
-        <div class="form-actions">
-          <van-button round block type="primary" native-type="submit" :loading="saving">
-            保存配置
-          </van-button>
-          <van-button round block type="default" @click.prevent="handleReset">清除本地配置</van-button>
-        </div>
-      </van-form>
-      <p class="config-meta">最后更新：{{ lastSyncedLabel }}</p>
-    </section>
 
-    <section v-if="canManageCache" class="section-card">
-      <h2 class="section-title">后端缓存管理</h2>
-      <p class="text-secondary">此操作将调用 Fastify 代理的缓存失效接口，请谨慎清理生产环境缓存。</p>
-      <div class="cache-actions">
-        <van-button type="warning" block :loading="cacheLoading === 'all'" @click="handleInvalidate()">清除全部缓存</van-button>
-      </div>
-      <van-cell-group inset>
-        <van-cell v-for="meta in platformOptions" :key="meta.code">
-          <template #title>
-            <div class="platform-title">
-              <span>{{ meta.name }}</span>
-              <van-tag plain :color="meta.color">{{ meta.code }}</van-tag>
+        <section class="config-section">
+          <h2 class="section-title">运行模式</h2>
+          <van-cell-group inset class="form-group">
+            <van-field label="运行模式">
+              <template #input>
+                <van-radio-group v-model="runtimeMode" direction="horizontal">
+                  <van-radio name="frontend">纯前端</van-radio>
+                  <van-radio name="backend">前后端分离</van-radio>
+                </van-radio-group>
+              </template>
+            </van-field>
+            <van-cell title="当前状态" :value="modeHint" />
+          </van-cell-group>
+          <div class="mode-tips">
+            <p v-if="runtimeMode === 'frontend'" class="mode-tip mode-tip--warning">
+              💡 纯前端模式：浏览器直接调用折淘客API，需要配置密钥，密钥存储在本地浏览器中。
+            </p>
+            <p v-else class="mode-tip mode-tip--info">
+              💡 前后端分离模式：通过后端代理请求，后端负责签名和缓存，前端无需配置密钥。
+            </p>
+          </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="config-section">
+          <h2 class="section-title">密钥管理</h2>
+          <van-form @submit="handleSubmit">
+            <van-cell-group inset class="form-group">
+              <van-field
+                v-model="form.appkey"
+                name="appkey"
+                label="AppKey"
+                placeholder="请输入折淘客 AppKey"
+                :disabled="runtimeMode === 'backend'"
+                required
+              />
+              <van-field
+                v-model="form.sid"
+                name="sid"
+                label="SID"
+                placeholder="请输入 SID"
+                :disabled="runtimeMode === 'backend'"
+                required
+              />
+              <van-field
+                v-model="form.customerId"
+                name="customerId"
+                label="客户 ID"
+                placeholder="可选：若折淘客账号要求可填写"
+                :disabled="runtimeMode === 'backend'"
+              />
+            </van-cell-group>
+            
+            <div class="form-actions">
+              <van-button class="action-btn primary" block native-type="submit" :loading="saving">
+                保存配置
+              </van-button>
+              <van-button class="action-btn outline" block @click.prevent="handleReset">清除本地配置</van-button>
             </div>
-          </template>
-          <template #value>
-            <van-button
-              size="small"
-              type="primary"
-              :loading="cacheLoading === meta.code"
-              @click="handleInvalidate(meta.code)"
-            >
-              清除此平台
-            </van-button>
-          </template>
-        </van-cell>
-      </van-cell-group>
-    </section>
+          </van-form>
+          <p class="config-meta">最后更新：{{ lastSyncedLabel }}</p>
+        </section>
+
+        <template v-if="canManageCache">
+          <div class="divider"></div>
+
+          <section class="config-section">
+            <h2 class="section-title">后端缓存管理</h2>
+            <p class="text-secondary">此操作将调用 Fastify 代理的缓存失效接口，请谨慎清理生产环境缓存。</p>
+            <div class="cache-actions">
+              <van-button class="action-btn warning" block :loading="cacheLoading === 'all'" @click="handleInvalidate()">清除全部缓存</van-button>
+            </div>
+            <van-cell-group inset class="form-group">
+              <van-cell v-for="meta in platformOptions" :key="meta.code">
+                <template #title>
+                  <div class="platform-title">
+                    <span>{{ meta.name }}</span>
+                    <van-tag plain :color="meta.color">{{ meta.code }}</van-tag>
+                  </div>
+                </template>
+                <template #value>
+                  <van-button
+                    size="small"
+                    class="action-btn primary small"
+                    :loading="cacheLoading === meta.code"
+                    @click="handleInvalidate(meta.code)"
+                  >
+                    清除此平台
+                  </van-button>
+                </template>
+              </van-cell>
+            </van-cell-group>
+          </section>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { reactive, ref, computed, watch, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
 
 import { PLATFORM_OPTIONS } from '@/constants/platforms';
@@ -111,6 +132,7 @@ import { useConfigStore } from '@/stores/config';
 import { invalidateBackendCache } from '@/services/cacheService';
 import { toDisplayMessage } from '@/utils/errors';
 
+const router = useRouter();
 const configStore = useConfigStore();
 const form = reactive<ApiCredentials>({ ...configStore.credentials });
 const runtimeMode = ref<RuntimeMode>(configStore.runtimeMode);
@@ -194,26 +216,113 @@ async function handleInvalidate(platform?: PlatformCode) {
 }
 </script>
 
-<style scoped>
+.page-container {
+  min-height: 100vh;
+  background-color: var(--surface-base);
+  padding-bottom: 80px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.back-icon {
+  position: absolute;
+  left: 0;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.config-card {
+  padding: 24px;
+}
+
 .page__notice {
-  margin: 12px 0 16px;
+  margin: 0 0 24px;
+  border-radius: 12px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--brand-gradient);
+  border-radius: 2px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 24px 0;
+}
+
+.form-group {
+  margin: 0 !important;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .form-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 24px;
+}
+
+.action-btn {
+  border-radius: 24px;
+  font-weight: 600;
+  border: none;
+  background: var(--brand-gradient);
+  color: white !important;
+  height: 44px;
+}
+
+.action-btn.primary {
+  background: var(--brand-gradient);
+  color: white !important;
+}
+
+.action-btn.outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.action-btn.warning {
+  background: var(--warning-color);
+}
+
+.action-btn.small {
+  height: 32px;
+  padding: 0 16px;
 }
 
 .config-meta {
-  margin-top: 12px;
+  margin-top: 16px;
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 12px;
+  text-align: center;
 }
 
 .cache-actions {
-  margin: 12px 0;
+  margin: 16px 0;
 }
 
 .platform-title {
@@ -224,13 +333,13 @@ async function handleInvalidate(platform?: PlatformCode) {
 }
 
 .mode-tips {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .mode-tip {
   margin: 0;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -246,4 +355,9 @@ async function handleInvalidate(platform?: PlatformCode) {
   color: #2563eb;
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
-</style>
+
+.text-secondary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}

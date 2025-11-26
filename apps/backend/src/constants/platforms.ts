@@ -1,6 +1,6 @@
 import type { PlatformCode, PlatformMeta } from '../types/activity';
 
-export const PLATFORM_CODES = ['meituan', 'eleme'] as const satisfies PlatformCode[];
+export const PLATFORM_CODES = ['meituan', 'eleme', 'douyin'] as const satisfies PlatformCode[];
 
 export const PLATFORM_META: Record<PlatformCode, PlatformMeta> = {
   meituan: {
@@ -14,6 +14,12 @@ export const PLATFORM_META: Record<PlatformCode, PlatformMeta> = {
     name: '饿了么',
     color: '#3B82F6',
     description: '饿了么联盟活动，含转链接口',
+  },
+  douyin: {
+    code: 'douyin',
+    name: '抖音',
+    color: '#000000',
+    description: '抖音商品转链',
   },
 };
 

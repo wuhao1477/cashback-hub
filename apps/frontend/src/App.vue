@@ -1,14 +1,18 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
-    <div class="app-shell">
-      <RouterView v-slot="{ Component }">
-        <transition name="fade-slide" mode="out-in">
+    <div class="app-container">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
-      </RouterView>
-      <van-tabbar route fixed placeholder>
+      </router-view>
+
+      <van-tabbar route fixed placeholder safe-area-inset-bottom :border="false" class="custom-tabbar">
         <van-tabbar-item replace to="/activities" icon="apps-o">
           活动
+        </van-tabbar-item>
+        <van-tabbar-item replace to="/link-convert" icon="exchange">
+          转链
         </van-tabbar-item>
       </van-tabbar>
     </div>
@@ -16,16 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
 
-// 使用 Object.freeze 冻结主题配置，提升性能
-const themeVars = Object.freeze({
-  navBarBackgroundColor: '#0f172a',
-  navBarTitleTextColor: '#ffffff',
-  tabbarItemActiveColor: '#0f172a',
-  tabbarBackgroundColor: '#ffffff',
-  tabbarHeight: '50px',
-});
+const themeVars = {
+  tabbarItemActiveColor: '#3b82f6',
+  tabbarItemTextColor: '#64748b',
+  tabbarBackground: 'rgba(255, 255, 255, 0.9)',
+};
 </script>
 
 <style scoped>

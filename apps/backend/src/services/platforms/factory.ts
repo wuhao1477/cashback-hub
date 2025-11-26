@@ -2,11 +2,13 @@ import type { AppConfig } from '../../config/env';
 import type { PlatformCode } from '../../types/activity';
 import { ElemePlatformClient } from './eleme';
 import { MeituanPlatformClient } from './meituan';
+import { DouyinPlatformClient } from './douyin';
 import type { BasePlatformClient } from './base';
 
 const registry: Record<PlatformCode, new (config: AppConfig) => BasePlatformClient> = {
   meituan: MeituanPlatformClient,
   eleme: ElemePlatformClient,
+  douyin: DouyinPlatformClient,
 };
 
 export function createPlatformClient(code: PlatformCode, config: AppConfig) {

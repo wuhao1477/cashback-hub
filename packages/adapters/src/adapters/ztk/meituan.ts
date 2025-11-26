@@ -137,7 +137,7 @@ function normalizeLinkInfo(detail?: RawActivity) {
   const extraFields = qrcodes.map((item) => ({ label: item.label, value: item.url }));
   const defaultLink = variants.find((item) => item.type === 2)?.url || variants[0]?.url;
   const shortLink = variants.find((item) => item.type === 2)?.url;
-  const linksByType = variants.reduce<Record<number, string>>((acc, item) => {
+  const linksByType = variants.reduce<Record<number | string, string>>((acc, item) => {
     if (acc[item.type] === undefined) {
       acc[item.type] = item.url;
     }

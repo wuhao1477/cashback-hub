@@ -1,101 +1,125 @@
 <template>
-  <div class="page">
-    <van-nav-bar title="活动详情" left-arrow @click-left="router.back" />
+  <div class="page-container">
+    <!-- Premium Header -->
+    <div class="g-page-header">
+      <div class="header-nav">
+        <van-icon name="arrow-left" class="back-icon" @click="router.back()" />
+        <h1 class="g-page-title">活动详情</h1>
+      </div>
+      <p class="g-page-subtitle">查看活动详情与转链</p>
+    </div>
 
-    <section v-if="loading" class="section-card">
-      <van-skeleton title row="4" :loading="true" avatar avatar-shape="square" />
-    </section>
+    <div class="g-content-wrapper">
+      <div class="g-main-card detail-card">
+        <section v-if="loading" class="loading-state">
+          <van-skeleton title row="4" :loading="true" avatar avatar-shape="square" />
+        </section>
 
-    <section v-else-if="errorState" class="section-card error-card">
-      <p class="error-card__title">加载失败</p>
-      <p class="error-card__message">{{ errorState.message }}</p>
-      <p v-if="errorState.traceId" class="error-card__trace">Trace ID：{{ errorState.traceId }}</p>
-      <van-button size="small" type="primary" @click="loadDetail">重试</van-button>
-    </section>
+        <section v-else-if="errorState" class="error-card">
+          <p class="error-card__title">加载失败</p>
+          <p class="error-card__message">{{ errorState.message }}</p>
+          <p v-if="errorState.traceId" class="error-card__trace">Trace ID：{{ errorState.traceId }}</p>
+          <van-button size="small" class="retry-btn" @click="loadDetail">重试</van-button>
+        </section>
 
-    <template v-else-if="detail">
-      <section class="section-card detail-hero">
-        <div class="detail-hero__info">
-          <p class="detail-hero__title">{{ detail.title }}</p>
-          <p class="detail-hero__deadline">{{ detail.deadlineText }}</p>
-          <van-tag type="primary">{{ detail.commissionText }}</van-tag>
-          <van-tag v-if="detail.cached" type="success">缓存</van-tag>
-        </div>
-        <img v-if="detail.cover" class="detail-hero__thumb" :src="detail.cover" alt="活动封面" />
-      </section>
+        <template v-else-if="detail">
+          <section class="detail-hero">
+            <div class="detail-hero__info">
+              <h2 class="detail-hero__title">{{ detail.title }}</h2>
+              <p class="detail-hero__deadline">{{ detail.deadlineText }}</p>
+              <div class="tags-row">
+                <van-tag type="primary" size="medium">{{ detail.commissionText }}</van-tag>
+                <van-tag v-if="detail.cached" type="success" size="medium">缓存</van-tag>
+              </div>
+            </div>
+            <img v-if="detail.cover" class="detail-hero__thumb" :src="detail.cover" alt="活动封面" />
+          </section>
 
-      <section class="section-card">
-        <h2 class="section-title">活动介绍</h2>
-        <p class="detail-description">{{ detail.description }}</p>
-        <van-button
-          v-if="detail.link"
-          block
-          type="primary"
-          icon="link-o"
-          :url="detail.link"
-          target="_blank"
-        >
-          打开活动页
-        </van-button>
-      </section>
+          <div class="divider"></div>
 
-      <section v-if="!isDesktop" class="section-card">
-        <h2 class="section-title">快速操作</h2>
-        <div class="detail-actions">
-          <van-button type="primary" block :loading="linkLoading === LINK_TYPE_MAP.APP" @click="handleOpenApp">
-            唤起 App
-          </van-button>
-          <van-button type="success" block :loading="linkLoading === LINK_TYPE_MAP.MINI_PROGRAM" @click="handleOpenMiniProgram">
-            拉起小程序
-          </van-button>
-          <van-button
-            type="default"
-            block
-            :loading="linkLoading === LINK_TYPE_MAP.H5_SHORT"
-            @click="handleLinkAction('H5_SHORT')"
-          >
-            H5 打开
-          </van-button>
-        </div>
-      </section>
+          <section class="detail-section">
+            <h3 class="section-title">活动介绍</h3>
+            <p class="detail-description">{{ detail.description }}</p>
+            <van-button
+              v-if="detail.link"
+              block
+              class="action-btn primary"
+              icon="link-o"
+              @click="openLink(detail.link)"
+            >
+              打开活动页
+            </van-button>
+          </section>
 
-      <section class="section-card">
-        <h2 class="section-title">更多信息</h2>
-        <van-cell-group inset>
-          <van-cell
-            title="活动地址"
-            :value="detail.link"
-          />
-          <van-cell
-            v-for="item in detail.extra"
-            :key="item.label"
-            :title="item.label"
-            :value="item.value"
-          />
-        </van-cell-group>
-      </section>
+          <div class="divider"></div>
 
-      <section class="section-card qrcode-section" :class="{ 'qrcode-section--mobile': !isDesktop }">
-        <h2 class="section-title">二维码</h2>
-        <div v-if="qrcodes.length" :class="isDesktop ? 'qrcode-grid' : 'qrcode-list'">
-          <div v-for="item in qrcodes" :key="item.label" class="qrcode-item" @click="previewQr(item)">
-            <img :src="item.url" :alt="item.label" />
-            <p>{{ item.label }}</p>
-          </div>
-        </div>
-        <div v-else class="qrcode-empty">
-          <p>暂无二维码，点击下方按钮获取</p>
-          <van-button
-            type="primary"
-            size="small"
-            :loading="linkLoading === LINK_TYPE_MAP.H5_LONG"
-            @click="handleLinkAction('H5_LONG', false)"
-          >
-            加载二维码
-          </van-button>
-        </div>
-      </section>
-    </template>
+          <section v-if="!isDesktop" class="detail-section">
+            <h3 class="section-title">快速操作</h3>
+            <div class="detail-actions">
+              <van-button class="action-btn" block :loading="linkLoading === LINK_TYPE_MAP.APP" @click="handleOpenApp">
+                唤起 App
+              </van-button>
+              <van-button class="action-btn success" block :loading="linkLoading === LINK_TYPE_MAP.MINI_PROGRAM" @click="handleOpenMiniProgram">
+                拉起小程序
+              </van-button>
+              <van-button
+                class="action-btn outline"
+                block
+                :loading="linkLoading === LINK_TYPE_MAP.H5_SHORT"
+                @click="handleLinkAction('H5_SHORT')"
+              >
+                H5 打开
+              </van-button>
+            </div>
+          </section>
+
+          <div class="divider"></div>
+
+          <section class="detail-section">
+            <h3 class="section-title">更多信息</h3>
+            <van-cell-group inset class="info-group">
+              <van-cell
+                title="活动地址"
+                :value="detail.link"
+                class="info-cell"
+              />
+              <van-cell
+                v-for="item in detail.extra"
+                :key="item.label"
+                :title="item.label"
+                :value="item.value"
+                class="info-cell"
+              />
+            </van-cell-group>
+          </section>
+
+          <div class="divider"></div>
+
+          <section class="detail-section qrcode-section" :class="{ 'qrcode-section--mobile': !isDesktop }">
+            <h3 class="section-title">二维码</h3>
+            <div v-if="qrcodes.length" :class="isDesktop ? 'qrcode-grid' : 'qrcode-list'">
+              <div v-for="item in qrcodes" :key="item.label" class="qrcode-item" @click="previewQr(item)">
+                <div class="qrcode-wrapper">
+                  <img :src="item.url" :alt="item.label" />
+                </div>
+                <p class="qrcode-label">{{ item.label }}</p>
+              </div>
+            </div>
+            <div v-else class="qrcode-empty">
+              <p>暂无二维码，点击下方按钮获取</p>
+              <van-button
+                class="action-btn primary small"
+                size="small"
+                :loading="linkLoading === LINK_TYPE_MAP.H5_LONG"
+                @click="handleLinkAction('H5_LONG', false)"
+              >
+                加载二维码
+              </van-button>
+            </div>
+          </section>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -274,36 +298,143 @@ watch(
 </script>
 
 <style scoped>
+.page-container {
+  min-height: 100vh;
+  background-color: var(--surface-base);
+  padding-bottom: 80px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.back-icon {
+  position: absolute;
+  left: 0;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.detail-card {
+  padding: 24px;
+}
+
 .detail-hero {
   display: flex;
-  gap: 12px;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.detail-hero__info {
+  flex: 1;
 }
 
 .detail-hero__title {
   margin: 0 0 8px;
   font-size: 20px;
   font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
 }
 
 .detail-hero__deadline {
   margin: 0 0 12px;
   color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 8px;
 }
 
 .detail-hero__thumb {
-  width: 160px;
+  width: 120px;
+  height: 120px;
   border-radius: 12px;
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 24px 0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--brand-gradient);
+  border-radius: 2px;
 }
 
 .detail-description {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.action-btn {
+  border-radius: 24px;
+  font-weight: 600;
+  border: none;
+  background: var(--brand-gradient);
+  color: white !important;
+}
+
+.action-btn.success {
+  background: var(--success-color);
+}
+
+.action-btn.outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.action-btn.primary {
+  background: var(--brand-gradient);
+  color: white !important;
+}
+
+.action-btn.small {
+  height: 32px;
+  padding: 0 16px;
 }
 
 .detail-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.info-group {
+  margin: 0 !important;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.info-cell {
+  background: var(--surface-base);
 }
 
 .qrcode-section {
@@ -323,42 +454,78 @@ watch(
   align-items: center;
 }
 
-.qrcode-section--mobile .qrcode-item img {
-  width: min(240px, 65vw);
-}
-
 .qrcode-item {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+}
+
+.qrcode-wrapper {
+  padding: 8px;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
 }
 
 .qrcode-item img {
-  width: 260px;
+  width: 140px;
+  height: 140px;
   object-fit: contain;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  background: #fff;
+  display: block;
+}
+
+.qrcode-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 .qrcode-empty {
   text-align: center;
+  padding: 24px;
+  background: var(--surface-base);
+  border-radius: 12px;
+  color: var(--text-secondary);
 }
 
 .error-card {
-  border: 1px solid rgba(248, 113, 113, 0.4);
+  margin-top: 16px;
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  background: #fef2f2;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
 }
 
 .error-card__title {
-  margin: 0;
+  margin: 0 0 8px;
+  font-size: 16px;
   font-weight: 600;
+  color: var(--danger-color);
 }
 
-.error-card__message,
-.error-card__trace {
+.error-card__message {
   margin: 4px 0;
+  font-size: 14px;
   color: var(--text-secondary);
+}
+
+.error-card__trace {
+  margin: 8px 0 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 6px 10px;
+  border-radius: 6px;
+  word-break: break-all;
+}
+
+.retry-btn {
+  margin-top: 12px;
 }
 </style>

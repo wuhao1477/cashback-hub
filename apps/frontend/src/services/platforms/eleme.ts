@@ -1,5 +1,5 @@
 import { ZtkElemeAdapter } from '@cashback/adapters';
-import { http } from '@/services/alova';
+import { http } from '@/services/httpClient';
 import type { ActivityDetail, ActivityListResult } from '@/types/activity';
 import { BasePlatform } from './base';
 import { getPlatformAdapter } from './adapters';

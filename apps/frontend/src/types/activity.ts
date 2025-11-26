@@ -27,6 +27,7 @@ export interface PlatformMeta {
   color: string;
   description: string;
   accent: string;
+  hasList?: boolean;
 }
 
 export interface StandardResponse<T> {

@@ -1,6 +1,6 @@
 import type { PlatformCode } from '@/types/activity';
 import type { ApiResponse } from '@/types/api';
-import { http } from '@/services/alova';
+import { http } from '@/services/httpClient';
 import { PlatformRequestError } from '@/utils/errors';
 
 interface CachePayload {

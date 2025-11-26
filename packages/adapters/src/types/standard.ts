@@ -1,16 +1,20 @@
-export type StandardPlatformCode = 'meituan' | 'eleme';
+export type StandardPlatformCode = 'meituan' | 'eleme' | 'douyin';
 
 export type StandardActivityStatus = 'online' | 'offline' | 'upcoming' | 'unknown';
 
 export interface StandardLinkVariant {
-  type: number;
+  type: number | string;
   label: string;
   url: string;
+  desc?: string;
 }
 
 export interface StandardQrCode {
   label: string;
   url: string;
+  width?: number;
+  height?: number;
+  desc?: string;
 }
 
 export interface StandardExtraField {
@@ -41,7 +45,12 @@ export interface StandardActivityDetail extends StandardActivitySummary {
   raw?: Record<string, unknown>;
   linkVariants?: StandardLinkVariant[];
   qrcodes?: StandardQrCode[];
-  linksByType?: Record<number, string>;
+  linksByType?: Record<number | string, string>;
   appLink?: string;
   miniProgramPath?: string;
+  originalPrice?: number;
+  finalPrice?: number;
+  couponAmount?: number;
+  shopName?: string;
+  detailImages?: string[];
 }
