@@ -8,6 +8,10 @@
 
     <div class="g-content-wrapper">
       <div class="g-main-card list-card">
+        <van-tabs v-model:active="activePlatform" shrink animated>
+          <van-tab v-for="meta in platformMetas" :key="meta.code" :title="meta.name" :name="meta.code" />
+        </van-tabs>
+
         <van-notice-bar
           v-if="securityHint"
           class="page__notice"
@@ -17,10 +21,6 @@
         >
           {{ securityHint }}
         </van-notice-bar>
-
-        <van-tabs v-model:active="activePlatform" shrink animated>
-          <van-tab v-for="meta in platformMetas" :key="meta.code" :title="meta.name" :name="meta.code" />
-        </van-tabs>
 
         <div class="list-content">
           <div v-if="needConfig" class="empty-state">

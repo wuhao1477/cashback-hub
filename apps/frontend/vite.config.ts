@@ -12,6 +12,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // 确保 workspace 包在 dev 和 build 时使用相同的源码路径
+      '@cashback/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
+      '@cashback/adapters': fileURLToPath(new URL('../../packages/adapters/src/index.ts', import.meta.url)),
     },
   },
   server: {
