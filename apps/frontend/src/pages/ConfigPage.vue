@@ -368,14 +368,16 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 
 /* Premium Header */
 .g-page-header {
-  background: var(--surface-card);
-  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: calc(12px + env(safe-area-inset-top)) 20px 16px;
   position: sticky;
   top: 0;
-  z-index: 10;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  margin-bottom: 0 !important; /* Override global negative margin */
+  transition: all 0.3s ease;
 }
 
 .header-nav {
@@ -385,15 +387,18 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 }
 
 .back-icon {
-  font-size: 22px;
+  font-size: 20px;
   color: var(--text-primary);
   margin-right: 12px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  padding: 8px;
+  margin-left: -8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
 }
 
 .back-icon:active {
-  opacity: 0.6;
+  background-color: var(--surface-muted);
 }
 
 .g-page-title {
@@ -407,7 +412,7 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .g-page-subtitle {
   font-size: 13px;
   color: var(--text-tertiary);
-  margin: 0 0 0 34px; /* Align with title */
+  margin: 0 0 0 32px; /* Align with title */
   font-weight: 400;
 }
 
@@ -427,23 +432,25 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .page__notice {
   margin-bottom: 24px;
   border-radius: 12px;
-  border: 1px solid rgba(249, 115, 22, 0.1);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.05);
+  border: none;
+  background: #fff7ed;
+  color: #c2410c;
 }
 
 /* Config Section */
 .config-section {
   background: var(--surface-card);
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: box-shadow 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
 }
 
 .config-section:hover {
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .section-title {
@@ -463,7 +470,7 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   height: 18px;
   background: var(--brand-gradient);
   border-radius: 4px;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 /* Form Group Styles */
@@ -471,7 +478,7 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   margin: 0 !important;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--surface-muted);
 }
 
 /* Mode Tips */
@@ -482,21 +489,21 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .mode-tip {
   margin: 0;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 13px;
   line-height: 1.6;
 }
 
 .mode-tip--warning {
-  background: linear-gradient(to right, rgba(255, 247, 237, 1), rgba(255, 255, 255, 0.5));
+  background: #fff7ed;
   color: #c2410c;
-  border: 1px solid rgba(251, 146, 60, 0.2);
+  border: 1px solid rgba(251, 146, 60, 0.1);
 }
 
 .mode-tip--info {
-  background: linear-gradient(to right, rgba(239, 246, 255, 1), rgba(255, 255, 255, 0.5));
+  background: #eff6ff;
   color: #1d4ed8;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 /* Provider Cards */
@@ -510,7 +517,7 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .provider-card {
   position: relative;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: 20px;
   background: var(--surface-base);
   border: 2px solid transparent;
   cursor: pointer;
@@ -518,32 +525,16 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   overflow: hidden;
 }
 
-.provider-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  padding: 2px;
-  background: linear-gradient(135deg, var(--border-color), transparent);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
 .provider-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  background: #fff;
 }
 
 .provider-card--active {
   background: #fff;
   border-color: var(--brand-color);
   box-shadow: 0 8px 24px rgba(var(--brand-color-rgb), 0.15);
-}
-
-.provider-card--active::before {
-  display: none;
 }
 
 .provider-card__header {
@@ -561,10 +552,10 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 
 .provider-card__check {
   color: var(--brand-color);
-  font-size: 20px;
+  font-size: 18px;
   background: rgba(var(--brand-color-rgb), 0.1);
   border-radius: 50%;
-  padding: 2px;
+  padding: 4px;
 }
 
 .provider-card__platforms {
@@ -579,10 +570,11 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   font-size: 10px;
   color: var(--text-tertiary);
   background: var(--surface-muted);
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 100px;
   display: flex;
   align-items: center;
+  font-weight: 600;
 }
 
 .provider-card__status {
@@ -594,8 +586,8 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .provider-detail {
   padding: 20px;
   background: var(--surface-muted);
-  border-radius: 16px;
-  border: 1px dashed var(--border-color);
+  border-radius: 20px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
 .provider-detail__header {
@@ -618,12 +610,15 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-weight: 500;
-  transition: opacity 0.2s;
+  font-weight: 600;
+  padding: 4px 12px;
+  background: rgba(var(--brand-color-rgb), 0.1);
+  border-radius: 100px;
+  transition: all 0.2s;
 }
 
 .provider-detail__link:hover {
-  opacity: 0.8;
+  background: rgba(var(--brand-color-rgb), 0.15);
 }
 
 .provider-detail__desc {
@@ -657,9 +652,9 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .action-btn {
   border-radius: 100px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   border: none;
-  height: 48px;
+  height: 52px;
   transition: transform 0.1s, box-shadow 0.2s;
 }
 
@@ -670,7 +665,11 @@ async function handleInvalidate(platform?: AppPlatformCode) {
 .action-btn.primary {
   background: var(--brand-gradient);
   color: white !important;
-  box-shadow: 0 4px 12px rgba(var(--brand-color-rgb), 0.3);
+  box-shadow: 0 8px 20px rgba(var(--brand-color-rgb), 0.25);
+}
+
+.action-btn.primary:active {
+  box-shadow: 0 4px 12px rgba(var(--brand-color-rgb), 0.25);
 }
 
 .action-btn.outline {
@@ -730,10 +729,10 @@ async function handleInvalidate(platform?: AppPlatformCode) {
   height: auto;
   line-height: 1.4;
   border-radius: 6px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .divider {
-  display: none; /* Hidden in new design */
+  display: none;
 }
 </style>
