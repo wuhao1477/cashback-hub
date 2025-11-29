@@ -23,6 +23,27 @@ export type ProviderFeature =
     | 'deeplink'        // Deeplink/App唤起
     | 'miniProgram';    // 小程序路径
 
+/** 凭证字段类型 */
+export type CredentialFieldType = 'text' | 'password' | 'select';
+
+/** 凭证字段定义 */
+export interface CredentialFieldDefinition {
+    /** 字段键名 */
+    key: string;
+    /** 显示标签 */
+    label: string;
+    /** 占位符提示 */
+    placeholder: string;
+    /** 是否必填 */
+    required: boolean;
+    /** 字段类型 */
+    type: CredentialFieldType;
+    /** 选项列表(type=select时使用) */
+    options?: { label: string; value: string }[];
+    /** 帮助文本 */
+    helpText?: string;
+}
+
 /** 平台能力配置 */
 export interface PlatformCapability {
     /** 平台代码 */
@@ -45,6 +66,8 @@ export interface ProviderCapabilities {
     description: string;
     /** 官网/文档链接 */
     website?: string;
+    /** 凭证字段定义 */
+    credentialFields: CredentialFieldDefinition[];
     /** 支持的平台及其能力 */
     platforms: PlatformCapability[];
 }
@@ -65,7 +88,10 @@ export interface ProviderMeta {
     supportedPlatforms: PlatformCode[];
 }
 
-/** 供应商凭证 */
+/** 动态凭证类型 - 键值对形式，支持不同供应商的不同字段 */
+export type DynamicCredentials = Record<string, string | undefined>;
+
+/** 供应商凭证(折淘客专用，保持向后兼容) */
 export interface ProviderCredentials {
     /** AppKey */
     appkey: string;
@@ -73,6 +99,8 @@ export interface ProviderCredentials {
     sid: string;
     /** 客户ID(可选) */
     customerId?: string;
+    /** 允许额外字段 */
+    [key: string]: string | undefined;
 }
 
 /** 供应商配置 */

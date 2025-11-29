@@ -1,24 +1,60 @@
 import { defineStore } from 'pinia';
-import type { ProviderCode } from '@cashback/core';
+import type { ProviderCode, DynamicCredentials, CredentialFieldDefinition } from '@cashback/core';
+import { ZHETAOKE_CAPABILITIES, JUTUIKE_CAPABILITIES } from '@cashback/core';
 
 export type RuntimeMode = 'frontend' | 'backend';
 
+/** 动态凭证类型（从 core 包导入） */
+export type { DynamicCredentials };
+
+/** 旧版凭证接口（保持向后兼容） */
 export interface ApiCredentials {
   appkey: string;
   sid: string;
   customerId?: string;
+  [key: string]: string | undefined;
 }
 
 /** 供应商配置 */
 export interface ProviderSettings {
   /** 当前选中的供应商 */
   activeProvider: ProviderCode;
-  /** 各供应商的凭证 */
-  credentials: Record<ProviderCode, ApiCredentials>;
+  /** 各供应商的凭证（动态键值对） */
+  credentials: Record<ProviderCode, DynamicCredentials>;
+}
+
+/** 所有供应商能力配置 */
+export const ALL_PROVIDER_CAPABILITIES = [
+  ZHETAOKE_CAPABILITIES,
+  JUTUIKE_CAPABILITIES,
+];
+
+/** 根据供应商代码获取能力配置 */
+export function getProviderCapabilities(code: ProviderCode) {
+  return ALL_PROVIDER_CAPABILITIES.find(p => p.code === code);
+}
+
+/** 根据供应商代码获取凭证字段定义 */
+export function getCredentialFields(code: ProviderCode): CredentialFieldDefinition[] {
+  return getProviderCapabilities(code)?.credentialFields || [];
+}
+
+/** 验证凭证是否完整（所有必填字段都有值） */
+export function validateCredentials(code: ProviderCode, credentials: DynamicCredentials): boolean {
+  const fields = getCredentialFields(code);
+  return fields
+    .filter(f => f.required)
+    .every(f => credentials[f.key]?.trim());
+}
+
+/** 检查供应商是否已配置 */
+export function isProviderConfigured(code: ProviderCode, credentials: DynamicCredentials): boolean {
+  return validateCredentials(code, credentials);
 }
 
 interface ConfigState {
-  credentials: ApiCredentials;
+  /** 当前凭证（兼容旧版，使用动态类型） */
+  credentials: DynamicCredentials;
   runtimeMode: RuntimeMode;
   lastSyncedAt?: number;
   /** 供应商设置 */
@@ -37,8 +73,8 @@ function initProviderSettings(): ProviderSettings {
   return {
     activeProvider: DEFAULT_PROVIDER,
     credentials: {
-      zhetaoke: { appkey: '', sid: '', customerId: '' },
-      jutuike: { appkey: '', sid: '', customerId: '' },
+      zhetaoke: {},
+      jutuike: {},
     },
   };
 }
@@ -136,13 +172,18 @@ export const useConfigStore = defineStore('config', {
     isFrontendReady: (state) => {
       if (state.runtimeMode === 'backend') return true;
       const creds = state.providerSettings.credentials[state.providerSettings.activeProvider];
-      return Boolean(creds?.appkey && creds?.sid);
+      return validateCredentials(state.providerSettings.activeProvider, creds || {});
     },
     /** 当前活动的供应商 */
     activeProvider: (state): ProviderCode => state.providerSettings.activeProvider,
     /** 当前供应商的凭证 */
-    activeCredentials: (state): ApiCredentials => {
-      return state.providerSettings.credentials[state.providerSettings.activeProvider] || { appkey: '', sid: '' };
+    activeCredentials: (state): DynamicCredentials => {
+      return state.providerSettings.credentials[state.providerSettings.activeProvider] || {};
+    },
+    /** 当前供应商是否已配置 */
+    isCurrentProviderConfigured: (state): boolean => {
+      const creds = state.providerSettings.credentials[state.providerSettings.activeProvider];
+      return isProviderConfigured(state.providerSettings.activeProvider, creds || {});
     },
   },
   actions: {
@@ -163,11 +204,11 @@ export const useConfigStore = defineStore('config', {
       }
     },
     /** 更新当前供应商的凭证 */
-    updateCredentials(payload: ApiCredentials) {
-      this.credentials = { ...payload };
+    updateCredentials(payload: DynamicCredentials) {
+      this.credentials = { ...this.credentials, ...payload };
       this.providerSettings.credentials[this.providerSettings.activeProvider] = { ...payload };
       this.lastSyncedAt = Date.now();
-      persistToStorage(this.credentials);
+      persistToStorage(this.credentials as ApiCredentials);
       persistProviderSettings(this.providerSettings);
     },
     /** 切换供应商 */
@@ -179,12 +220,12 @@ export const useConfigStore = defineStore('config', {
       persistProviderSettings(this.providerSettings);
     },
     /** 更新指定供应商的凭证 */
-    updateProviderCredentials(provider: ProviderCode, payload: ApiCredentials) {
+    updateProviderCredentials(provider: ProviderCode, payload: DynamicCredentials) {
       this.providerSettings.credentials[provider] = { ...payload };
       // 如果是当前供应商，同步到 credentials
       if (provider === this.providerSettings.activeProvider) {
-        this.credentials = { ...payload };
-        persistToStorage(this.credentials);
+        this.credentials = { ...this.credentials, ...payload };
+        persistToStorage(this.credentials as ApiCredentials);
       }
       this.lastSyncedAt = Date.now();
       persistProviderSettings(this.providerSettings);
@@ -194,7 +235,7 @@ export const useConfigStore = defineStore('config', {
       const appkey = getFirstAvailable(searchParams, ['ztk_key', 'ZTK_KEY']);
       const sid = getFirstAvailable(searchParams, ['ztk_sid', 'ZTK_SID']);
       if (!appkey && !sid) return;
-      const next: ApiCredentials = { ...this.credentials };
+      const next: DynamicCredentials = { ...this.credentials };
       if (appkey) next.appkey = appkey;
       if (sid) next.sid = sid;
       this.updateCredentials(next);
@@ -207,7 +248,7 @@ export const useConfigStore = defineStore('config', {
       this.credentials = { ...resolveEnvCredentials() };
       this.providerSettings.credentials[this.providerSettings.activeProvider] = { ...this.credentials };
       this.lastSyncedAt = Date.now();
-      persistToStorage(this.credentials);
+      persistToStorage(this.credentials as ApiCredentials);
       persistProviderSettings(this.providerSettings);
     },
   },

@@ -14,3 +14,6 @@ export {
 
 // 折淘客供应商
 export * from './zhetaoke';
+
+// 聚推客供应商（占位）
+export { JUTUIKE_CAPABILITIES } from './jutuike';

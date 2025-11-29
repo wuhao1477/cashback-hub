@@ -28,6 +28,32 @@ export const ZHETAOKE_CAPABILITIES: ProviderCapabilities = {
     name: '折淘客',
     description: '专业的外卖/电商返利API服务商，支持美团、饿了么、抖音等平台',
     website: 'https://www.zhetaoke.com',
+    credentialFields: [
+        {
+            key: 'appkey',
+            label: 'AppKey',
+            placeholder: '请输入折淘客 AppKey',
+            required: true,
+            type: 'text',
+            helpText: '在折淘客控制台 -> 我的应用 中获取',
+        },
+        {
+            key: 'sid',
+            label: 'SID',
+            placeholder: '请输入推广位 SID',
+            required: true,
+            type: 'text',
+            helpText: '推广位ID，用于佣金结算',
+        },
+        {
+            key: 'customerId',
+            label: '客户ID',
+            placeholder: '可选，若账号要求可填写',
+            required: false,
+            type: 'text',
+            helpText: '部分高级功能需要',
+        },
+    ],
     platforms: [
         {
             platform: 'meituan',

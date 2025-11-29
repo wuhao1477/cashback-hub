@@ -15,9 +15,9 @@ import {
     type PlatformCode,
     type ActivityListResult,
     type ActivityDetail,
+    type DynamicCredentials,
 } from '@cashback/core';
 import { useConfigStore } from '@/stores/config';
-import type { ApiCredentials } from '@/stores/config';
 
 /**
  * 创建前端 HTTP 客户端
@@ -76,14 +76,14 @@ function createFrontendHttpClient(): HttpClient {
 /**
  * 从凭证创建供应商配置
  */
-function createProviderConfig(providerCode: ProviderCode, credentials: ApiCredentials): ProviderConfig {
+function createProviderConfig(providerCode: ProviderCode, credentials: DynamicCredentials): ProviderConfig {
     return {
         name: providerCode,
         enabled: true,
         priority: 1,
         credentials: {
-            appkey: credentials.appkey,
-            sid: credentials.sid,
+            appkey: credentials.appkey || '',
+            sid: credentials.sid || '',
             customerId: credentials.customerId,
         },
         timeout: 15000,
@@ -98,8 +98,13 @@ let cachedConfigHash: string | null = null;
  * 计算配置哈希（用于检测变化）
  * 包含供应商和凭证信息
  */
-function hashConfig(providerCode: ProviderCode, credentials: ApiCredentials): string {
-    return `${providerCode}:${credentials.appkey}:${credentials.sid}:${credentials.customerId || ''}`;
+function hashConfig(providerCode: ProviderCode, credentials: DynamicCredentials): string {
+    // 将所有凭证值排序后拼接
+    const credValues = Object.entries(credentials)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => `${k}=${v || ''}`)
+        .join('&');
+    return `${providerCode}:${credValues}`;
 }
 
 /**
