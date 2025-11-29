@@ -1,17 +1,17 @@
 import type { ActivityDetail, ActivityListResult, LinkVariant, PlatformCode, QrCodeMeta } from '@/types/activity';
 import type { ApiResponse } from '@/types/api';
-import { createPlatform, supportedPlatforms } from '@/services/platforms/factory';
-import type { ActivityListQuery } from '@/services/platforms/types';
 import { useConfigStore } from '@/stores/config';
 import { createTraceId } from '@/utils/trace';
 import { PlatformRequestError } from '@/utils/errors';
 import { PLATFORM_META } from '@/constants/platforms';
 import { http } from '@/services/httpClient';
+import { usePlatformService } from '@/services/platformService';
+import { PLATFORM_CODES } from '@cashback/core';
 
 const DEFAULT_PAGE_SIZE = 10;
 
 export function getPlatformMetas() {
-  return supportedPlatforms().map((code) => PLATFORM_META[code]);
+  return PLATFORM_CODES.map((code) => PLATFORM_META[code as PlatformCode]);
 }
 
 /**
@@ -19,24 +19,26 @@ export function getPlatformMetas() {
  */
 export async function fetchActivityList(
   platform: PlatformCode,
-  options: Partial<Omit<ActivityListQuery, 'traceId'>> = {},
+  options: { page?: number; pageSize?: number; activityId?: string } = {},
 ): Promise<ActivityListResult> {
   const configStore = useConfigStore();
+
+  // 后端模式：调用后端 API
   if (configStore.runtimeMode === 'backend') {
     return fetchListFromBackend(platform, options);
   }
+
+  // 纯前端模式：使用 @cashback/core
   const traceId = createTraceId(platform);
-  const instance = createPlatform(platform, {
-    credentials: configStore.credentials,
-    runtimeMode: configStore.runtimeMode,
-  });
   try {
-    return await instance.fetchList({
+    const service = usePlatformService();
+    const result = await service.fetchActivityList(platform, {
       page: options.page ?? 1,
       pageSize: options.pageSize ?? DEFAULT_PAGE_SIZE,
       activityId: options.activityId,
       traceId,
     });
+    return result as ActivityListResult;
   } catch (error) {
     logFrontendError(traceId, '活动列表请求失败', error);
     throw new PlatformRequestError('活动列表请求失败', traceId, error);
@@ -48,21 +50,22 @@ export async function fetchActivityList(
  */
 export async function fetchActivityDetail(platform: PlatformCode, id: string, options: { linkType?: number } = {}): Promise<ActivityDetail> {
   const configStore = useConfigStore();
+
+  // 后端模式：调用后端 API
   if (configStore.runtimeMode === 'backend') {
     return fetchDetailFromBackend(platform, id, options);
   }
-  const traceId = createTraceId(`${platform}-detail`);
-  const instance = createPlatform(platform, {
-    credentials: configStore.credentials,
-    runtimeMode: configStore.runtimeMode,
-  });
 
+  // 纯前端模式：使用 @cashback/core
+  const traceId = createTraceId(`${platform}-detail`);
   try {
-    return await instance.fetchDetail({
+    const service = usePlatformService();
+    const result = await service.fetchActivityDetail(platform, {
       id,
-      traceId,
       linkType: options.linkType,
+      traceId,
     });
+    return result as ActivityDetail;
   } catch (error) {
     logFrontendError(traceId, '活动详情请求失败', error);
     throw new PlatformRequestError('活动详情请求失败', traceId, error);
@@ -72,7 +75,7 @@ export async function fetchActivityDetail(platform: PlatformCode, id: string, op
 // 后端代理模式：调用 Fastify 服务，由后端处理签名、分页、缓存
 async function fetchListFromBackend(
   platform: PlatformCode,
-  options: Partial<Omit<ActivityListQuery, 'traceId'>>,
+  options: { page?: number; pageSize?: number; activityId?: string },
 ) {
   const method = http.Get<ApiResponse<ActivityListResult>>(`/api/activities/${platform}`, {
     params: {
@@ -122,17 +125,15 @@ export async function fetchLinkVariant(platform: PlatformCode, id: string, linkT
     };
   }
 
+  // 纯前端模式：使用 @cashback/core
   const traceId = createTraceId(`${platform}-link-${linkType}`);
-  const instance = createPlatform(platform, {
-    credentials: configStore.credentials,
-    runtimeMode: configStore.runtimeMode,
-  });
   try {
-    const detail = await instance.fetchDetail({ id, traceId, linkType });
+    const service = usePlatformService();
+    const detail = await service.fetchActivityDetail(platform, { id, linkType, traceId });
     return {
-      linkVariants: detail.linkVariants ?? [],
-      qrcodes: detail.qrcodes ?? [],
-      linksByType: detail.linksByType ?? {},
+      linkVariants: (detail.linkVariants ?? []) as LinkVariant[],
+      qrcodes: (detail.qrcodes ?? []) as QrCodeMeta[],
+      linksByType: (detail.linksByType ?? {}) as Record<number, string>,
       appLink: detail.appLink,
       miniProgramPath: detail.miniProgramPath,
     };

@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
-
+import { createZtkAdapter, type RawActivity } from '@cashback/adapters';
 import type { PlatformCode } from '@/types/activity';
-import type { RawActivity } from '@/services/platforms/types';
-import { getPlatformAdapter } from '@/services/platforms/adapters';
 
 type ActivityMap = Record<string, RawActivity>;
 
@@ -29,7 +27,7 @@ export const useActivityCacheStore = defineStore('activity-cache', {
       if (!this.records[platform]) {
         this.records[platform] = {};
       }
-      const adapter = getPlatformAdapter(platform);
+      const adapter = createZtkAdapter(platform as any);
       const platformCache = this.records[platform];
       
       list.forEach((item) => {

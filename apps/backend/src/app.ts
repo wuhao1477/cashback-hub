@@ -8,8 +8,6 @@ import { registerEnv } from './config/env';
 import { registerCache } from './plugins/cache';
 import { ActivityService } from './services/activityService';
 import routes from './routes';
-import { LinkService } from './services/link';
-import { linkRoutes } from './routes/link';
 
 export async function buildServer() {
   const app = Fastify({
@@ -55,7 +53,6 @@ export async function buildServer() {
   await registerCache(app, redisClient);
 
   app.decorate('activityService', new ActivityService(app.config, app.cache));
-  app.decorate('linkService', new LinkService(app.config));
 
   await app.register(routes, { prefix: '/api' });
 

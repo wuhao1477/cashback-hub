@@ -11,6 +11,7 @@
   "dependencies": {
     "@alova/adapter-axios": "^2",
     "@cashback/adapters": "workspace:*",
+    "@cashback/core": "workspace:*",
     "@vueuse/core": "^14.0.0",
     "alova": "^3.3.4",
     "axios": "^1",

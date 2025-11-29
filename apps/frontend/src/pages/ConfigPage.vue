@@ -34,7 +34,7 @@
           </van-cell-group>
           <div class="mode-tips">
             <p v-if="runtimeMode === 'frontend'" class="mode-tip mode-tip--warning">
-              💡 纯前端模式：浏览器直接调用折淘客API，需要配置密钥，密钥存储在本地浏览器中。
+              💡 纯前端模式：浏览器直接调用供应商API，需要配置密钥，密钥存储在本地浏览器中。
             </p>
             <p v-else class="mode-tip mode-tip--info">
               💡 前后端分离模式：通过后端代理请求，后端负责签名和缓存，前端无需配置密钥。
@@ -45,7 +45,42 @@
         <div class="divider"></div>
 
         <section class="config-section">
-          <h2 class="section-title">密钥管理</h2>
+          <h2 class="section-title">供应商选择</h2>
+          <van-cell-group inset class="form-group">
+            <van-field label="当前供应商">
+              <template #input>
+                <van-radio-group v-model="activeProvider" direction="horizontal" @change="handleProviderChange">
+                  <van-radio v-for="provider in providerOptions" :key="provider.code" :name="provider.code">
+                    {{ provider.name }}
+                  </van-radio>
+                </van-radio-group>
+              </template>
+            </van-field>
+          </van-cell-group>
+          <div v-if="currentProviderInfo" class="provider-info">
+            <p class="provider-desc">{{ currentProviderInfo.description }}</p>
+            <div class="provider-features">
+              <span class="feature-label">支持平台：</span>
+              <van-tag v-for="platform in currentProviderInfo.platforms" :key="platform.platform" plain type="primary" class="feature-tag">
+                {{ getPlatformName(platform.platform) }}
+              </van-tag>
+            </div>
+            <div v-if="currentPlatformFeatures.length > 0" class="provider-features">
+              <span class="feature-label">支持功能：</span>
+              <van-tag v-for="feature in currentPlatformFeatures" :key="feature" plain type="success" class="feature-tag">
+                {{ getFeatureName(feature) }}
+              </van-tag>
+            </div>
+            <a v-if="currentProviderInfo.website" :href="currentProviderInfo.website" target="_blank" class="provider-link">
+              📚 查看供应商文档
+            </a>
+          </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="config-section">
+          <h2 class="section-title">密钥管理 - {{ currentProviderName }}</h2>
           <van-form @submit="handleSubmit">
             <van-cell-group inset class="form-group">
               <van-field
@@ -124,18 +159,38 @@ import dayjs from 'dayjs';
 import { reactive, ref, computed, watch, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
+import { ZHETAOKE_CAPABILITIES, type ProviderCode, type ProviderFeature } from '@cashback/core';
 
-import { PLATFORM_OPTIONS } from '@/constants/platforms';
-import type { PlatformCode } from '@/types/activity';
+import { PLATFORM_OPTIONS, PLATFORM_META } from '@/constants/platforms';
+import type { PlatformCode as AppPlatformCode } from '@/types/activity';
 import type { ApiCredentials, RuntimeMode } from '@/stores/config';
 import { useConfigStore } from '@/stores/config';
 import { invalidateBackendCache } from '@/services/cacheService';
+import { clearPlatformServiceCache } from '@/services/platformService';
 import { toDisplayMessage } from '@/utils/errors';
+
+/** 供应商选项列表 */
+const providerOptions = [
+  ZHETAOKE_CAPABILITIES,
+  // 未来可以添加更多供应商
+  // JUTUIKE_CAPABILITIES,
+];
+
+/** 功能名称映射 */
+const FEATURE_NAMES: Record<ProviderFeature, string> = {
+  activityList: '活动列表',
+  activityDetail: '活动详情',
+  convertLink: '转链',
+  qrcode: '二维码',
+  deeplink: 'App唤起',
+  miniProgram: '小程序',
+};
 
 const router = useRouter();
 const configStore = useConfigStore();
-const form = reactive<ApiCredentials>({ ...configStore.credentials });
+const form = reactive<ApiCredentials>({ ...configStore.activeCredentials });
 const runtimeMode = ref<RuntimeMode>(configStore.runtimeMode);
+const activeProvider = ref<ProviderCode>(configStore.activeProvider);
 const saving = ref(false);
 const cacheLoading = ref<string | null>(null);
 const platformOptions = PLATFORM_OPTIONS;
@@ -154,15 +209,54 @@ const lastSyncedLabel = computed(() => {
 });
 
 const modeHint = computed(() =>
-  runtimeMode.value === 'frontend' ? '浏览器直接请求折淘客接口' : '后端代为加密与代理'
+  runtimeMode.value === 'frontend' ? '浏览器直接请求供应商接口' : '后端代为加密与代理'
 );
 
+/** 当前供应商名称 */
+const currentProviderName = computed(() => {
+  const provider = providerOptions.find(p => p.code === activeProvider.value);
+  return provider?.name || activeProvider.value;
+});
+
+/** 当前供应商信息 */
+const currentProviderInfo = computed(() => {
+  return providerOptions.find(p => p.code === activeProvider.value);
+});
+
+/** 当前平台支持的功能 */
+const currentPlatformFeatures = computed((): ProviderFeature[] => {
+  const provider = currentProviderInfo.value;
+  if (!provider) return [];
+  // 合并所有平台的功能
+  const features = new Set<ProviderFeature>();
+  provider.platforms.forEach(p => p.features.forEach(f => features.add(f)));
+  return Array.from(features);
+});
+
+/** 获取平台名称 */
+function getPlatformName(code: string): string {
+  return PLATFORM_META[code as AppPlatformCode]?.name || code;
+}
+
+/** 获取功能名称 */
+function getFeatureName(feature: ProviderFeature): string {
+  return FEATURE_NAMES[feature] || feature;
+}
+
 watch(
-  () => ({ ...configStore.credentials }),
+  () => configStore.activeCredentials,
   (value) => {
     Object.assign(form, value);
   },
 );
+
+/** 切换供应商 */
+function handleProviderChange(provider: ProviderCode) {
+  configStore.switchProvider(provider);
+  Object.assign(form, configStore.activeCredentials);
+  clearPlatformServiceCache();
+  showToast({ type: 'success', message: `已切换到 ${currentProviderName.value}` });
+}
 
 function handleSubmit() {
   // 前端模式下验证必填字段
@@ -179,11 +273,12 @@ function handleSubmit() {
   }
   saveTimeoutId = setTimeout(() => {
     if (runtimeMode.value === 'frontend') {
-      configStore.updateCredentials({ ...form });
+      configStore.updateProviderCredentials(activeProvider.value, { ...form });
     }
     configStore.updateRuntimeMode(runtimeMode.value);
+    clearPlatformServiceCache();
     saving.value = false;
-    showToast({ type: 'success', message: '配置已更新，运行模式已保存' });
+    showToast({ type: 'success', message: '配置已更新' });
     saveTimeoutId = null;
   }, 250);
 }
@@ -196,7 +291,7 @@ function handleReset() {
 
 const canManageCache = computed(() => runtimeMode.value === 'backend');
 
-async function handleInvalidate(platform?: PlatformCode) {
+async function handleInvalidate(platform?: AppPlatformCode) {
   if (!canManageCache.value) {
     showToast({ type: 'fail', message: '请先切换至前后端分离模式' });
     return;
@@ -360,4 +455,48 @@ async function handleInvalidate(platform?: PlatformCode) {
   font-size: 13px;
   color: var(--text-secondary);
   margin-bottom: 12px;
+}
+
+.provider-info {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.03));
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.provider-desc {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.provider-features {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.feature-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.feature-tag {
+  font-size: 11px;
+}
+
+.provider-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--brand-color);
+  text-decoration: none;
+}
+
+.provider-link:hover {
+  text-decoration: underline;
 }

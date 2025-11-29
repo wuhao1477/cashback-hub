@@ -9,6 +9,10 @@ cashback-hub/
 ├── apps/
 │   ├── frontend/          # Vue 3 + Vite 前端应用
 │   └── backend/           # Fastify 后端服务
+├── packages/
+│   ├── core/              # @cashback/core - 核心业务逻辑（前后端共用）
+│   └── adapters/          # @cashback/adapters - 数据格式适配器
+├── docs/                  # 设计文档
 ├── package.json           # 根 package.json
 ├── pnpm-workspace.yaml    # pnpm workspace 配置
 ├── tsconfig.base.json     # 共享 TypeScript 配置
@@ -50,12 +54,11 @@ cashback-hub/
    - 实现请求签名和参数加密（`apps/frontend/src/utils/signature.ts`）
    - 统一错误处理和响应格式
 
-3. **平台策略模式** (`apps/frontend/src/services/platforms/`)
+3. **平台服务** (`apps/frontend/src/services/platformService.ts`)
 
-   - `BasePlatform` 抽象基类
-   - `MeituanPlatform` 美团平台实现
-   - `ElemePlatform` 饿了么平台实现
-   - 平台工厂类 `PlatformFactory`
+   - 使用 `@cashback/core` 的 `PlatformService`
+   - 封装前端 HTTP 客户端（fetch API）
+   - 支持多供应商切换
 
 4. **页面组件**
 
@@ -150,20 +153,21 @@ REDIS_PORT=6379
 
 ## 技术细节
 
-### 策略模式实现示例结构
+### 多供应商架构
+
+详见 [多供应商架构文档](multi-provider-architecture.md)
 
 ```typescript
-// apps/frontend/src/services/platforms/base.ts
-abstract class BasePlatform {
-  abstract getActivityList(params): Promise<Activity[]>
-  abstract getActivityDetail(id: string): Promise<ActivityDetail>
-}
+// 使用 @cashback/core 的 PlatformService
+import { createPlatformService } from '@cashback/core';
 
-// apps/frontend/src/services/platforms/meituan.ts
-class MeituanPlatform extends BasePlatform { ... }
+const service = createPlatformService({
+  httpClient: createFrontendHttpClient(),
+  providers: [{ name: 'zhetaoke', enabled: true, priority: 1, credentials }],
+});
 
-// apps/frontend/src/services/platforms/eleme.ts
-class ElemePlatform extends BasePlatform { ... }
+// 获取活动列表
+const result = await service.fetchActivityList('meituan', { page: 1, pageSize: 10 });
 ```
 
 ### 缓存实现
@@ -212,7 +216,8 @@ class ElemePlatform extends BasePlatform { ... }
 5. ✅ API 请求和缓存（alova.js）
 6. ✅ 活动列表和详情页面
 7. ✅ 响应式 UI 实现
-8. ⏸️ 后端项目初始化（第二阶段）
-9. ⏸️ 后端 API 代理和缓存
-10. ⏸️ 数据脱敏和清洗
+8. ✅ 后端项目初始化（第二阶段）
+9. ✅ 后端 API 代理和缓存
+10. ✅ @cashback/core 多供应商架构重构
 11. ⏸️ Docker 部署配置
+12. ⏸️ 添加更多供应商（聚推客等）

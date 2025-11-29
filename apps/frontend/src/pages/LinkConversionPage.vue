@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { showToast, showSuccessToast } from 'vant';
-import { http } from '@/services/httpClient';
-import type { StandardActivityDetail } from '@cashback/adapters';
 import { useClipboard } from '@vueuse/core';
-
+import { convertLink, canConvertLink } from '@/services/linkService';
+import type { PlatformCode, ConvertLinkResult } from '@cashback/core';
 const content = ref('');
-const platform = ref('douyin');
+const platform = ref<PlatformCode>('douyin');
 const loading = ref(false);
-const result = ref<StandardActivityDetail | null>(null);
+const result = ref<ConvertLinkResult | null>(null);
 
 const { copy, isSupported } = useClipboard();
 
-// const platforms = [
-//   { text: '抖音', value: 'douyin' },
-//   // { text: '美团', value: 'meituan' },
-//   // { text: '饿了么', value: 'eleme' },
-// ];
+/** 当前平台是否支持转链 */
+const isConvertSupported = computed(() => canConvertLink(platform.value));
 
 const handleConvert = async () => {
   if (!content.value) {
@@ -24,11 +20,16 @@ const handleConvert = async () => {
     return;
   }
 
+  if (!isConvertSupported.value) {
+    showToast('当前供应商不支持该平台的转链功能');
+    return;
+  }
+
   loading.value = true;
   result.value = null;
 
   try {
-    const data = await http.Post<StandardActivityDetail>('/api/link/convert', {
+    const data = await convertLink({
       platform: platform.value,
       content: content.value,
     });
@@ -172,7 +173,7 @@ const getLinkDescription = (variant: any) => {
                     <div class="qrcode-wrapper">
                       <van-image :src="qr.url" width="140" height="140" fit="cover" />
                     </div>
-                    <span class="qrcode-label">{{ qr.desc || qr.label }}</span>
+                    <span class="qrcode-label">{{ qr.label }}</span>
                   </div>
                 </div>
               </div>

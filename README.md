@@ -9,6 +9,9 @@ cashback-hub/
 ├── apps/
 │   ├── frontend/    # Vue3 + Vite 前端，含密钥配置、活动列表/详情
 │   └── backend/     # Fastify 后端服务
+├── packages/
+│   ├── core/        # @cashback/core - 核心业务逻辑（前后端共用）
+│   └── adapters/    # @cashback/adapters - 数据格式适配器
 ├── docs/            # 设计规范与实施计划
 ├── package.json     # 根脚本，统一调试/构建
 ├── pnpm-workspace.yaml
@@ -99,8 +102,9 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 ## 架构亮点
 
-- **策略模式**：美团、饿了么平台均实现 `fetchList` / `fetchDetail`，便于持续扩展。
-- **缓存体系**：前端基于 alova IndexedDB，后端（规划中）基于 Redis 并提供命名规范 `platform:<platform>:api:<resource>`。
+- **多供应商架构**：通过 `@cashback/core` 包实现供应商抽象，支持折淘客、聚推客等多个供应商。
+- **前后端共用**：核心业务逻辑在 `packages/core` 中实现，前后端共用同一套代码。
+- **缓存体系**：前端基于 alova IndexedDB（30分钟 TTL），后端基于 Redis（20分钟 TTL）。
 - **安全提示**：纯前端模式会在 UI 中告知密钥存储风险，后端模式将通过代理统一处理签名与脱敏。
 - **统一追踪**：全链路传递 `traceId`，错误面板会显示相关 ID，便于排障。
 
@@ -108,5 +112,6 @@ ALLOWED_ORIGINS=http://localhost:5173
 
 - [开发指南](docs/development-guideline.md)
 - [实施计划](docs/development-build-plan.md)
+- [多供应商架构](docs/multi-provider-architecture.md)
 
-欢迎基于以上文档继续迭代第二阶段：实现 Fastify 后端、Redis 缓存与 Docker 化部署。
+欢迎基于以上文档继续迭代：添加新供应商、实现 Docker 化部署等。
