@@ -12,7 +12,7 @@ import type {
     ProviderCapabilities,
     ProviderFeature,
 } from '../../types/provider';
-import type { SignFunction } from '../../utils/signature';
+
 import { ZhetaokeMeituanProvider } from './meituan';
 import { ZhetaokeElemeProvider } from './eleme';
 import { ZhetaokeDouyinProvider } from './douyin';
@@ -32,14 +32,7 @@ export class ZhetaokeProviderFactory implements ProviderFactory {
     readonly supportedPlatforms: PlatformCode[] = ['meituan', 'eleme', 'douyin'];
     readonly capabilities: ProviderCapabilities = ZHETAOKE_CAPABILITIES;
 
-    private signFn?: SignFunction;
 
-    /**
-     * 设置签名函数（用于 Node.js 环境）
-     */
-    setSignFunction(signFn: SignFunction): void {
-        this.signFn = signFn;
-    }
 
     /**
      * 创建平台供应商实例
@@ -52,7 +45,6 @@ export class ZhetaokeProviderFactory implements ProviderFactory {
         const options = {
             config,
             httpClient,
-            signFn: this.signFn,
         };
 
         switch (platform) {
@@ -88,10 +80,6 @@ export class ZhetaokeProviderFactory implements ProviderFactory {
 /**
  * 创建折淘客供应商工厂实例
  */
-export function createZhetaokeFactory(signFn?: SignFunction): ZhetaokeProviderFactory {
-    const factory = new ZhetaokeProviderFactory();
-    if (signFn) {
-        factory.setSignFunction(signFn);
-    }
-    return factory;
+export function createZhetaokeFactory(): ZhetaokeProviderFactory {
+    return new ZhetaokeProviderFactory();
 }

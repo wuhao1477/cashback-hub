@@ -7,7 +7,7 @@ import type { PlatformCode } from '../../types/platform';
 import type { HttpClient } from '../../types/http';
 import type { ProviderCode, ProviderConfig } from '../../types/provider';
 import { BaseProvider, type BaseProviderOptions } from '../base';
-import type { SignFunction } from '../../utils/signature';
+
 
 /**
  * 折淘客供应商基类
@@ -25,11 +25,13 @@ export abstract class ZhetaokeBaseProvider extends BaseProvider {
      */
     async healthCheck(): Promise<boolean> {
         try {
-            const params = await this.buildSignedParams('health-check', {
+            const params = {
+                appkey: this.config.credentials.appkey,
+                sid: this.config.credentials.sid,
                 type: 10,
                 page: 1,
                 page_size: 1,
-            });
+            };
             await this.httpClient.get(
                 'http://api.zhetaoke.com:10000/api/api_activity.ashx',
                 { params, timeout: 5000 }
@@ -48,5 +50,5 @@ export abstract class ZhetaokeBaseProvider extends BaseProvider {
 export interface ZhetaokeProviderOptions {
     config: ProviderConfig;
     httpClient: HttpClient;
-    signFn?: SignFunction;
+
 }

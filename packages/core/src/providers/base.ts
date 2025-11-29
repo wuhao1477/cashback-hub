@@ -14,7 +14,7 @@ import type {
     ConvertLinkOptions,
 } from '../types/provider';
 import type { ActivityListResult, ActivityDetail, ConvertLinkResult } from '../types/activity';
-import { buildSignedParams, type SignFunction } from '../utils/signature';
+
 
 /**
  * Provider 基类配置
@@ -26,8 +26,7 @@ export interface BaseProviderOptions {
     httpClient: HttpClient;
     /** 数据适配器 */
     adapter: ActivityAdapter;
-    /** 签名函数(可选，用于 Node.js 环境) */
-    signFn?: SignFunction;
+
 }
 
 /**
@@ -40,13 +39,13 @@ export abstract class BaseProvider implements PlatformProvider {
     protected readonly config: ProviderConfig;
     protected readonly httpClient: HttpClient;
     protected readonly adapter: ActivityAdapter;
-    protected readonly signFn?: SignFunction;
+
 
     constructor(options: BaseProviderOptions) {
         this.config = options.config;
         this.httpClient = options.httpClient;
         this.adapter = options.adapter;
-        this.signFn = options.signFn;
+
     }
 
     /**
@@ -72,27 +71,6 @@ export abstract class BaseProvider implements PlatformProvider {
     }
 
     /**
-     * 构建带签名的请求参数
-     */
-    protected async buildSignedParams(
-        traceId: string,
-        extra: Record<string, unknown>
-    ): Promise<Record<string, string>> {
-        return buildSignedParams(
-            {
-                appkey: this.config.credentials.appkey,
-                sid: this.config.credentials.sid,
-                customer_id: this.config.credentials.customerId,
-                timestamp: Date.now(),
-                traceId,
-                ...extra,
-            },
-            this.config.credentials.sid,
-            this.signFn
-        );
-    }
-
-    /**
      * 记录调试日志
      */
     protected log(message: string, extra?: unknown): void {
@@ -105,4 +83,6 @@ export abstract class BaseProvider implements PlatformProvider {
             }
         }
     }
+
+
 }

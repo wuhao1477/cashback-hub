@@ -27,7 +27,7 @@ export class ZhetaokeMeituanProvider extends ZhetaokeBaseProvider {
             config: options.config,
             httpClient: options.httpClient,
             adapter,
-            signFn: options.signFn,
+
         });
         this.adapter = adapter;
     }
@@ -40,12 +40,14 @@ export class ZhetaokeMeituanProvider extends ZhetaokeBaseProvider {
 
         this.log(`Fetching activity list`, { page, pageSize, activityId, traceId });
 
-        const params = await this.buildSignedParams(traceId, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             type: 10, // 美团类型
             page,
             page_size: pageSize,
             activityId,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.list, { params });
         const list = this.adapter.extractActivities(response, { traceId });
@@ -69,12 +71,14 @@ export class ZhetaokeMeituanProvider extends ZhetaokeBaseProvider {
 
         this.log(`Fetching activity detail`, { id, linkType, traceId });
 
-        const params = await this.buildSignedParams(traceId, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             actId: id,
             activityId: id,
             linkType: linkType ?? 1,
             miniCode: 1,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.detail, { params });
 
@@ -109,10 +113,12 @@ export class ZhetaokeMeituanProvider extends ZhetaokeBaseProvider {
      * 从列表接口获取单个活动（降级方案）
      */
     private async fetchSingleActivity(id: string, traceId: string): Promise<any> {
-        const params = await this.buildSignedParams(`${traceId}-fallback`, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             type: 10,
             activityId: id,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.list, { params });
         const list = this.adapter.extractActivities(response, { traceId });

@@ -17,7 +17,7 @@ import type {
     SelectionStrategy,
 } from '../types/provider';
 import type { ActivityListResult, ActivityDetail, ConvertLinkResult } from '../types/activity';
-import type { SignFunction } from '../utils/signature';
+
 import { createTraceId } from '../utils/trace';
 import { ProviderRegistry } from '../providers/registry';
 import { getProviderFactory, initializeDefaultFactories } from '../providers/factory';
@@ -32,8 +32,7 @@ export interface PlatformServiceOptions {
     providers: ProviderConfig[];
     /** 选择策略 */
     selectionStrategy?: SelectionStrategy;
-    /** 签名函数(用于 Node.js 环境) */
-    signFn?: SignFunction;
+
 }
 
 /**
@@ -53,7 +52,7 @@ export class PlatformService {
         this.configs = new Map();
 
         // 初始化默认工厂
-        initializeDefaultFactories(options.signFn);
+        initializeDefaultFactories();
 
         // 初始化供应商
         this.initializeProviders(options.providers);
@@ -114,7 +113,7 @@ export class PlatformService {
         options: Omit<ConvertLinkOptions, 'traceId'> & { traceId?: string }
     ): Promise<ConvertLinkResult> {
         const traceId = options.traceId || createTraceId(platform);
-        
+
         // 检查是否支持转链功能
         if (!this.supportsFeature(platform, 'convertLink')) {
             throw new Error(`当前供应商不支持 ${platform} 平台的转链功能`);

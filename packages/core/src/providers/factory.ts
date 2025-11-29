@@ -3,7 +3,7 @@
  */
 
 import type { ProviderCode, ProviderFactory } from '../types/provider';
-import type { SignFunction } from '../utils/signature';
+
 import { createZhetaokeFactory } from './zhetaoke';
 
 /** 已注册的工厂 */
@@ -37,9 +37,9 @@ export function getAllProviderFactories(): ProviderFactory[] {
 /**
  * 初始化默认工厂
  */
-export function initializeDefaultFactories(signFn?: SignFunction): void {
+export function initializeDefaultFactories(): void {
     // 注册折淘客工厂
-    registerProviderFactory(createZhetaokeFactory(signFn));
+    registerProviderFactory(createZhetaokeFactory());
 }
 
 /**

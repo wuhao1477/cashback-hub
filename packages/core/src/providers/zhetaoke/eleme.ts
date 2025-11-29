@@ -27,7 +27,7 @@ export class ZhetaokeElemeProvider extends ZhetaokeBaseProvider {
             config: options.config,
             httpClient: options.httpClient,
             adapter,
-            signFn: options.signFn,
+
         });
         this.adapter = adapter;
     }
@@ -40,12 +40,14 @@ export class ZhetaokeElemeProvider extends ZhetaokeBaseProvider {
 
         this.log(`Fetching activity list`, { page, pageSize, activityId, traceId });
 
-        const params = await this.buildSignedParams(traceId, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             type: 11, // 饿了么类型
             page,
             page_size: pageSize,
             activityId,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.list, { params });
         const list = this.adapter.extractActivities(response, { traceId });
@@ -69,9 +71,11 @@ export class ZhetaokeElemeProvider extends ZhetaokeBaseProvider {
 
         this.log(`Fetching activity detail`, { id, linkType, traceId });
 
-        const params = await this.buildSignedParams(traceId, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             activity_id: id,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.detail, { params });
 

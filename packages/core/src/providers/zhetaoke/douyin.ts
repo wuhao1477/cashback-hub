@@ -26,7 +26,7 @@ export class ZhetaokeDouyinProvider extends ZhetaokeBaseProvider {
             config: options.config,
             httpClient: options.httpClient,
             adapter,
-            signFn: options.signFn,
+
         });
         this.adapter = adapter;
     }
@@ -61,13 +61,15 @@ export class ZhetaokeDouyinProvider extends ZhetaokeBaseProvider {
 
         this.log(`Converting link`, { content, traceId });
 
-        const params = await this.buildSignedParams(traceId, {
+        const params = {
+            appkey: this.config.credentials.appkey,
+            sid: this.config.credentials.sid,
             product_url: content,
             need_qr_code: 'true',
             use_coupon: 'true',
             need_share_link: 'true',
             external_info: externalInfo,
-        });
+        };
 
         const response = await this.httpClient.get(ENDPOINTS.convert, { params });
 
