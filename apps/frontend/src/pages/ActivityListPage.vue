@@ -210,8 +210,7 @@ function handleSecretTap() {
 
 .list-card {
   padding: 0; /* Override default padding for full-width tabs */
-  background: transparent;
-  box-shadow: none;
+  overflow: hidden;
 }
 
 /* Custom Tab Styles */
@@ -233,10 +232,10 @@ function handleSecretTap() {
 }
 
 .page__notice {
-  margin: 0 0 16px;
-  border-radius: 12px;
+  margin: 12px 16px 0;
+  border-radius: 8px;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .list-gap {

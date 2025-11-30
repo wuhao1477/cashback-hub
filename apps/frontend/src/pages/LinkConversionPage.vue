@@ -274,6 +274,7 @@ const getLinkDescription = (variant: any) => {
 
 .douyin-logo {
   font-size: 14px;
+  filter: grayscale(1) brightness(1000%);
 }
 
 .platform-name {
